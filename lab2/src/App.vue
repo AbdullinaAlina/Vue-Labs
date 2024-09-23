@@ -1,6 +1,5 @@
 <script setup>
 import Feed from './components/Feed.vue';
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>

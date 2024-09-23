@@ -9,10 +9,19 @@
                     <h2 class="card__username">{{ post.PersonName }}</h2>
                     <p class="card__date">{{ post.PubDate }}</p>
                 </div>
-                  <!-- Display star ratings -->
+
                 <div class="card__rating">
-                    <i v-for="star in 5" :key="star" class="fa-star" :class="star <= post.Rating ? 'fa-solid' : 'fa-regular'"></i>
+                    <i v-for="star in Math.floor(post.likeCount / 4)" 
+                    class="fa-star fa-solid"></i>
+
+                    <i v-if="post.likeCount % 4 >= 2" 
+                    class="fa-regular fa-star-half-stroke"></i>
+
+                    <i v-for="star in ( 5 - Math.floor(post.likeCount / 4)) - (post.likeCount % 4 >= 2 ? 1 : 0)" 
+                    class="fa-star fa-regular"></i>
+
                 </div>
+
             </div>
             
         </div>
@@ -46,7 +55,6 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 24px;
-  margin-bottom: 12px;
   width: 600px;
   text-align: left;
 }
