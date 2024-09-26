@@ -67,7 +67,7 @@
     computed: {
     // Total number of pages
     totalPages() {
-      return Math.ceil(this.persons.length / this.itemsPerPage);
+      return Math.ceil(this.filteredPersons.length / this.itemsPerPage);
     },
     // Slice the persons array to return only the persons for the current page
     paginatedPersons() {
@@ -119,7 +119,7 @@
 
 .feed {
   width: 100%;
-  
+
 }
 .filters {
   margin-bottom: 10px;
