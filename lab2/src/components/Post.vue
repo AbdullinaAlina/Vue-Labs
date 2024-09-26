@@ -53,7 +53,7 @@
   <style scoped>
 .card {
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 24px;
   width: 600px;
   text-align: left;

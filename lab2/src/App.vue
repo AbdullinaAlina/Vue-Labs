@@ -1,10 +1,20 @@
 <script setup>
+import { ref } from 'vue';
 import Feed from './components/Feed.vue';
+import Sidebar from './components/Sidebar.vue';
+import Header from './components/Header.vue';
+
+const selectedCategory = ref(null); 
+
+function updateSelectedCategory(category) {
+  selectedCategory.value = category;
+}
 </script>
 
 <template>
   <div>
-    <Feed />
+    <Sidebar @categorySelected="updateSelectedCategory"/>
+    <Feed :selectedCategory="selectedCategory"/>
   </div>
 </template>
 
