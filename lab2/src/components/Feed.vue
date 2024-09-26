@@ -1,12 +1,21 @@
 <template>
     <div class="feed">
+      <div class="header">
+        <div class="section">
+          <h3>
+            {{ selectedCategory ? selectedCategory : '' }}
+          </h3>
+          
+        </div>
         <div class="filters">
             <label for="sort-options">Sort by:</label>
             <select id="sort-options" v-model="sortingType" @change="resetPage">
                 <option value="date">Date</option>
                 <option value="likes">Rating</option>
             </select>
-        </div>
+          </div>
+      </div>
+        
 
     <div class="posts-grid">
       <Post v-for="(person, index) in paginatedPersons" :key="person.id" :post="person" />
@@ -40,14 +49,14 @@
         currentPage: 1,
         itemsPerPage: 4,
         persons: [
-            { id: 1, PersonName: "Mark Twen", Avatar: "src/assets/pfp_1.svg", PubDate: "2024-09-13", Rating: 5, Commentary: "This is awesome!", Topic: "Design", isLiked: false, likeCount: 0 },
-            { id: 2, PersonName: "Katherine Johns", Avatar: "src/assets/pfp_2.svg", PubDate: "2024-09-08", Rating: 4, Commentary: "I lost the exit.", Topic: "Health", isLiked: false, likeCount: 1 },
-            { id: 3, PersonName: "Sally Robinson", Avatar: "src/assets/pfp_3.svg", PubDate: "2024-09-12", Rating: 5, Commentary: "Emotions overload!", Topic: "Science", isLiked: false, likeCount: 0 },
-            { id: 4, PersonName: "Stevie", Avatar: "src/assets/pfp_4.svg", PubDate: "2024-09-10", Rating: 3, Commentary: "Needs improvement", Topic: "Design", isLiked: false, likeCount: 1 },
-            { id: 5, PersonName: "Jenna Paul", Avatar: "src/assets/pfp_5.svg", PubDate: "2024-09-15", Rating: 4, Commentary: "Fantastic visuals!", Topic: "Business", isLiked: false, likeCount: 2 },
-            { id: 6, PersonName: "David King", Avatar: "src/assets/pfp_6.svg", PubDate: "2024-09-11", Rating: 3, Commentary: "A bit slow.", Topic: "Technology", isLiked: false, likeCount: 4 },
-            { id: 7, PersonName: "Michael Hart", Avatar: "src/assets/pfp_7.svg", PubDate: "2024-09-07", Rating: 5, Commentary: "Unforgettable journey.", Topic: "Science", isLiked: false, likeCount: 3 },
-            { id: 8, PersonName: "Olivia George", Avatar: "src/assets/pfp_8.svg", PubDate: "2024-09-09", Rating: 4, Commentary: "Such a peaceful vibe.", Topic: "Technology", isLiked: false, likeCount: 1 },
+            { id: 1, PersonName: "Mark Twen", Avatar: "src/assets/pfp_1.svg", PubDate: "2024-09-26", Rating: 5, Commentary: "This is awesome!", Topic: "Design", isLiked: false, likeCount: 0 },
+            { id: 2, PersonName: "Katherine Johns", Avatar: "src/assets/pfp_2.svg", PubDate: "2024-09-25", Rating: 4, Commentary: "I lost the exit.", Topic: "Health", isLiked: false, likeCount: 1 },
+            { id: 3, PersonName: "Sally Robinson", Avatar: "src/assets/pfp_3.svg", PubDate: "2024-09-24", Rating: 5, Commentary: "Emotions overload!", Topic: "Science", isLiked: false, likeCount: 0 },
+            { id: 4, PersonName: "Stevie", Avatar: "src/assets/pfp_4.svg", PubDate: "2024-09-23", Rating: 3, Commentary: "Needs improvement", Topic: "Design", isLiked: false, likeCount: 1 },
+            { id: 5, PersonName: "Jenna Paul", Avatar: "src/assets/pfp_5.svg", PubDate: "2024-09-22", Rating: 4, Commentary: "Fantastic visuals!", Topic: "Business", isLiked: false, likeCount: 2 },
+            { id: 6, PersonName: "David King", Avatar: "src/assets/pfp_6.svg", PubDate: "2024-09-21", Rating: 3, Commentary: "A bit slow.", Topic: "Technology", isLiked: false, likeCount: 4 },
+            { id: 7, PersonName: "Michael Hart", Avatar: "src/assets/pfp_7.svg", PubDate: "2024-09-20", Rating: 5, Commentary: "Unforgettable journey.", Topic: "Science", isLiked: false, likeCount: 3 },
+            { id: 8, PersonName: "Olivia George", Avatar: "src/assets/pfp_8.svg", PubDate: "2024-09-19", Rating: 4, Commentary: "Such a peaceful vibe.", Topic: "Technology", isLiked: false, likeCount: 1 },
             { id: 9, PersonName: "Chris Nolan", Avatar: "src/assets/pfp_9.svg", PubDate: "2024-09-06", Rating: 2, Commentary: "Could be better.", Topic: "Design", isLiked: false, likeCount: 7 },
             { id: 10, PersonName: "Isla Fisher", Avatar: "src/assets/pfp_10.svg", PubDate: "2024-09-13", Rating: 5, Commentary: "Pure joy!", Topic: "Business", isLiked: false, likeCount: 5 },
             { id: 11, PersonName: "Robert Quinn", Avatar: "src/assets/pfp_11.svg", PubDate: "2024-09-11", Rating: 3, Commentary: "Interesting concept.", Topic: "Technology", isLiked: false, likeCount: 2 },
@@ -65,11 +74,9 @@
       };
     }, 
     computed: {
-    // Total number of pages
     totalPages() {
       return Math.ceil(this.filteredPersons.length / this.itemsPerPage);
     },
-    // Slice the persons array to return only the persons for the current page
     paginatedPersons() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
@@ -120,6 +127,12 @@
 .feed {
   width: 100%;
 
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center
 }
 .filters {
   margin-bottom: 10px;

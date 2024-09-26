@@ -7,7 +7,7 @@
             <div class="card__info">
                 <div class="card__posted">
                     <h2 class="card__username">{{ post.PersonName }}</h2>
-                    <p class="card__date">{{ post.PubDate }}</p>
+                    <p class="card__date">{{ formattedPubDate }}</p>
                 </div>
 
                 <div class="card__rating">
@@ -26,28 +26,47 @@
             
         </div>
         <p class="card__content">{{ post.Commentary }}</p>
-        <!-- <p>{{ post.Topic }}</p> -->
-
-      <!-- Like button -->
+       
     <button class="card__like-button" @click="toggleLike" :style="{color: post.isLiked ? '#007BFF' : '#cccccc'}">
         <i class="fa fa-thumbs-up"></i>
         {{ post.likeCount }}
     </button>
     </div>
+    
   </template>
   
   <script>
+  import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
+
   export default {
     props: {
-      post: Object  // We will pass the person object as a prop from the parent component
+      post: Object  
+    },
+    computed: {
+        formattedPubDate() {
+            const pubDate = new Date(this.post.PubDate);
+            const now = new Date();
+
+            if (isToday(pubDate)) {
+                return `Today, ${format(pubDate, 'HH:mm')}`;
+            } else if (isYesterday(pubDate)) {
+                return `Yesterday, ${format(pubDate, 'HH:mm')}`;
+            } else if (now - pubDate < 7 * 24 * 60 * 60 * 1000) { // Days to ms
+                const daysAgo = formatDistanceToNow(pubDate, { addSuffix: true });
+                return `${daysAgo}, ${format(pubDate, 'HH:mm')}`;
+            } else {
+                return `${format(pubDate, 'dd.MM.yyyy')}`;
+            }
+        }   
     },
     methods: {
         toggleLike() {
         this.post.isLiked = !this.post.isLiked;
         this.post.likeCount += this.post.isLiked ? 1 : -1;
         }
+    }
   }
-  }
+  
   </script>
   
   <style scoped>
