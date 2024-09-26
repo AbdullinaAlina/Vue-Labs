@@ -60,7 +60,7 @@ button:focus-visible {
 }
 
 #app {
-padding: 40px;
+padding: 20px 40px;
 text-align: center;
 display: flex; /* Use flex to center contents */
 flex-direction: column; /* Stack child elements vertically */

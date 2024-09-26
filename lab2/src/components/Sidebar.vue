@@ -56,7 +56,7 @@
     border-radius: 100%;
     padding: 16px;
     background-color: #ff6b6b;
-    color: #333;
+    color: #fff;
     text-align: center;
 }
 

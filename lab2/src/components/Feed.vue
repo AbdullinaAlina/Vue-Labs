@@ -2,9 +2,9 @@
     <div class="feed">
       <div class="header">
         <div class="section">
-          <h3>
+          <h2>
             {{ selectedCategory ? selectedCategory : '' }}
-          </h3>
+          </h2>
           
         </div>
         <div class="filters">
@@ -132,7 +132,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center
+  align-items: center;
+  margin-bottom: 12px;
 }
 .filters {
   margin-bottom: 10px;

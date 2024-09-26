@@ -13,22 +13,29 @@ function updateSelectedCategory(category) {
 
 <template>
   <div>
-    <Sidebar @categorySelected="updateSelectedCategory"/>
+    <div class="header">
+      <Sidebar @categorySelected="updateSelectedCategory"/>
+      <i class="fa-solid fa-user"></i>
+    </div>
+    
     <Feed :selectedCategory="selectedCategory"/>
   </div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
+.header i {
+  cursor: pointer;
+    border-radius: 100%;
+    padding: 16px;
+    background-color: #ff6b6b;
+    color: #fff;
+    margin-bottom: 24px;
+  }
 </style>
