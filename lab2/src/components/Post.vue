@@ -27,7 +27,7 @@
         </div>
         <p class="card__content">{{ post.Commentary }}</p>
        
-    <button class="card__like-button" @click="toggleLike" :style="{color: post.isLiked ? '#007BFF' : '#cccccc'}">
+    <button class="card__like-button" @click="like" :style="{color: post.isLiked ? '#007BFF' : '#cccccc'}">
         <i class="fa fa-thumbs-up"></i>
         {{ post.likeCount }}
     </button>
@@ -60,6 +60,9 @@
         }   
     },
     methods: {
+        like() {
+            this.post.likeCount++;
+        },
         toggleLike() {
         this.post.isLiked = !this.post.isLiked;
         this.post.likeCount += this.post.isLiked ? 1 : -1;
@@ -71,8 +74,9 @@
   
   <style scoped>
 .card {
-  border: 1px solid #ccc;
-  border-radius: 4px;
+    background-color: #5BB9CD;
+    color: #ffffff;
+  border-radius: 10px;
   padding: 24px;
   width: 600px;
   text-align: left;
@@ -93,6 +97,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.card__content {
+    margin-bottom: 8px;
+
 }
 
 .card__username {
@@ -118,13 +127,15 @@
 }
 
 .card__like-button {
+    background-color: #ffffff;
+    color: #ffffff;
     padding: 4px 8px;
 }
 
 .card__rating {
     display: flex;
     flex-direction: row;
-    color: #FFD700; /* Gold for stars */
+    color: #FFD700; 
     gap: 2px;
 }
 
@@ -132,7 +143,7 @@ button {
   background-color: transparent;
   border: none;
   cursor: pointer;
-  color: #007BFF;
+  color: #43EF27;
 }
 button i {
   margin-right: 5px;

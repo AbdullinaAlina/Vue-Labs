@@ -2,10 +2,13 @@
     <div class="feed">
       <div class="header">
         <div class="section">
+          <h3>
+            {{ formatDate(new Date())}}
+          </h3>
           <h2>
             {{ selectedCategory ? selectedCategory : '' }}
           </h2>
-          
+            
         </div>
         <div class="filters">
             <label for="sort-options">Sort by:</label>
@@ -34,12 +37,12 @@
 </template>
   
 <script>
-  import Post from './Post.vue';  // Import the Post component
+  import Post from './Post.vue';  
   import _ from 'lodash';
   
   export default {
     components: {
-      Post  // Register the Post component
+      Post 
     },
     props: {
       selectedCategory: String
@@ -74,66 +77,78 @@
       };
     }, 
     computed: {
-    totalPages() {
-      return Math.ceil(this.filteredPersons.length / this.itemsPerPage);
-    },
-    paginatedPersons() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.filteredPersons.slice(start, end);
-    },
-    filteredPersons() {
-      let filtered = this.persons;
+      
+      totalPages() {
+        return Math.ceil(this.filteredPersons.length / this.itemsPerPage);
+      },
+      paginatedPersons() {
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+        return this.filteredPersons.slice(start, end);
+      },
+      filteredPersons() {
+        let filtered = this.persons;
+          this.currentPage = 1;
 
-      if (this.selectedCategory) {
-        filtered = filtered.filter(person => person.Topic === this.selectedCategory);
-      }
+        if (this.selectedCategory) {
+          filtered = filtered.filter(person => person.Topic === this.selectedCategory);
+        }
 
-      if (this.sortingType === 'date') {
-        return _.orderBy(filtered, ['PubDate'], ['desc']);
-      } else if (this.sortingType === 'likes') {
-        return _.orderBy(filtered, ['likeCount'], ['desc']);
+        if (this.sortingType === 'date') {
+          return _.orderBy(filtered, ['PubDate'], ['desc']);
+        } else if (this.sortingType === 'likes') {
+          return _.orderBy(filtered, ['likeCount'], ['desc']);
+        }
+        return filtered;
       }
-      return filtered;
+    },
+    methods: {
+      formatDate(date) {
+      const options = { month: 'short', day: 'numeric', year: 'numeric' };
+      return new Date(date).toLocaleDateString('en-US', options);
+    },
+      prevPage() {
+        if (this.currentPage > 1) {
+          this.currentPage--;
+        }
+      },
+      nextPage() {
+        if (this.currentPage < this.totalPages) {
+          this.currentPage++;
+        }
+      },
+      sortByDate() {
+        this.sortingType = 'date';
+        this.currentPage = 1; // Reset page to 1
+      },
+      sortByLikes() {
+        this.sortingType = 'likes';
+        this.currentPage = 1; // Reset page to 1
+      }
     }
-  },
-  methods: {
-    // Go to the previous page
-    prevPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-      }
-    },
-    // Go to the next page
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-      }
-    },
-    sortByDate() {
-      this.sortingType = 'date';
-      this.currentPage = 1; // Reset page to 1
-    },
-    sortByLikes() {
-      this.sortingType = 'likes';
-      this.currentPage = 1; // Reset page to 1
-    }
-  }
-} 
+  } 
 </script>
   
 <style scoped>
 
 .feed {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
   width: 100%;
-
+  padding: 20px 0;
 }
+
 .header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  width: 100%;
+  padding: 4px 80px;
+  color: #fff
 }
 .filters {
   margin-bottom: 10px;
@@ -157,6 +172,9 @@ border-radius: 8px;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px; /* Adjust the gap between cards as needed */
   margin-bottom: 24px;
+  justify-content: center;
+  padding: 30px;
+  background-color: rgb(255, 255, 255, 0.3);
 }
 
 /* Specifically place each post in the correct position */

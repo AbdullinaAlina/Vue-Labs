@@ -55,7 +55,7 @@
     cursor: pointer;
     border-radius: 100%;
     padding: 16px;
-    background-color: #ff6b6b;
+    background-color: #2e2e2e;
     color: #fff;
     text-align: center;
 }
@@ -90,7 +90,7 @@ ul li {
 }
 
 .sidebar__button {
-    background-color: #ff6b6b;
+    background-color: #43EF27;
     border: none;
     padding: 8px 16px;
     color: white;
