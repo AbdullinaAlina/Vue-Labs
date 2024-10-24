@@ -129,8 +129,14 @@ export default {
 
 <style scoped>
 
+
 .feed {
 align-items: center;
+background-image: url(/assets/background.png);
+background-repeat: no-repeat;
+background-size: cover;
+height: 100vh;
+
 display: flex;
 flex-direction: column;
 text-align: center;
