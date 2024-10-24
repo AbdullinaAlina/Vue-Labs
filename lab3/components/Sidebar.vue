@@ -24,7 +24,7 @@
         </ul>
       </div>
   
-      <div class="profile-icon" @click="openOverlay">
+      <div class="profile-icon" @click="toggleOverlay">
         <font-awesome :icon="['fas', 'user']" />
       </div>
   
@@ -55,8 +55,8 @@
   };
   
   // Open and close overlay methods
-  const openOverlay = () => {
-    isOverlayOpen.value = true;
+  const toggleOverlay = () => {
+    isOverlayOpen.value = !isOverlayOpen.value;
   };
   
   const closeOverlay = () => {
