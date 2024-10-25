@@ -1,18 +1,9 @@
 <template>
-    <div class="overlay" v-if="isOpen" @click.self="closeOverlay"> <!-- Close overlay when clicking outside -->
+    <div class="auth-overlay" v-if="isOpen" @click.self="closeOverlay">
       <div class="overlay__content">
         <h2>Authentication</h2>
-        <button @click="showLogin">Login</button>
+        <button @click="showLoginOverlay">Login</button>
         <button @click="showRegister">Register</button>
-  
-        <div v-if="showLoginForm">
-          <h3>Login</h3>
-          <form @submit.prevent="handleLogin">
-            <input type="text" placeholder="Username" v-model="email" />
-            <input type="password" placeholder="Password" v-model="password" />
-            <button type="submit">Login</button>
-          </form>
-        </div>
   
         <div v-if="showRegisterForm">
           <h3>Register</h3>
@@ -23,52 +14,52 @@
             <button type="submit">Register</button>
           </form>
         </div>
+  
+        <LoginOverlay :isOpen="isLoginOverlayOpen" @close="closeLoginOverlay" />
       </div>
     </div>
   </template>
   
   <script setup>
   import { ref } from 'vue';
+  import LoginOverlay from './LoginOverlay.vue';
   
   const props = defineProps({
     isOpen: {
       type: Boolean,
-      required: true
+      required: true,
     },
     onClose: {
       type: Function,
-      required: true
-    }
+      required: true,
+    },
   });
   
   const email = ref('');
   const password = ref('');
   const name = ref('');
-  const showLoginForm = ref(false);
   const showRegisterForm = ref(false);
+  const isLoginOverlayOpen = ref(false);
   
   const closeOverlay = () => {
-    showLoginForm.value = false;
     showRegisterForm.value = false;
     email.value = '';
     password.value = '';
     name.value = '';
+    isLoginOverlayOpen.value = false;
     props.onClose();
   };
   
-  const showLogin = () => {
-    showLoginForm.value = true;
-    showRegisterForm.value = false;
-  };
-  
   const showRegister = () => {
-    showLoginForm.value = false;
     showRegisterForm.value = true;
   };
   
-  const handleLogin = () => {
-    console.log('Logging in with', email.value, password.value);
-    closeOverlay();
+  const showLoginOverlay = () => {
+    isLoginOverlayOpen.value = true;
+  };
+  
+  const closeLoginOverlay = () => {
+    isLoginOverlayOpen.value = false;
   };
   
   const handleRegister = () => {
@@ -78,9 +69,9 @@
   </script>
   
   <style scoped>
-  .overlay {
+  .auth-overlay {
     position: fixed;
-    top: 40px;
+    top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
