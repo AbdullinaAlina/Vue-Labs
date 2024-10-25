@@ -3,7 +3,7 @@
       <div class="overlay__content">
         <h2>Authentication</h2>
         <button @click="showLoginOverlay">Login</button>
-        <button @click="showRegister">Register</button>
+        <button @click="redirectToRegister">Register</button>
   
         <div v-if="showRegisterForm">
           <h3>Register</h3>
@@ -22,6 +22,8 @@
   
   <script setup>
   import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
+
   import LoginOverlay from './LoginOverlay.vue';
   
   const props = defineProps({
@@ -35,6 +37,7 @@
     },
   });
   
+  const router = useRouter();
   const email = ref('');
   const password = ref('');
   const name = ref('');
@@ -50,9 +53,10 @@
     props.onClose();
   };
   
-  const showRegister = () => {
-    showRegisterForm.value = true;
-  };
+  const redirectToRegister = () => {
+  props.onClose(); // Close the authentication overlay
+  router.push('/register'); // Navigate to the /register page
+};
   
   const showLoginOverlay = () => {
     isLoginOverlayOpen.value = true;
