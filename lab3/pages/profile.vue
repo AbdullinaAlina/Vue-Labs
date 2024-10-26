@@ -4,23 +4,30 @@
       <div class="profile-content" v-if="user.isAuth">
         <div class="profile-details">
           <img :src="profilePicture" alt="Profile Picture" v-if="profilePicture" class="profile-pic" />
-          <p><strong>Username:</strong> </p>
-          <p><strong>Email:</strong> </p>
-          <p><strong>Age:</strong> </p>
-          <p><strong>Location:</strong> </p>
-          <p><strong>Rating:</strong></p>
+          <div class="details">
+            <p><strong>Username:</strong>
+              <input v-model="updatedUser.username" :disabled="!isEditing" />
+            </p>
+            <p><strong>Email:</strong>
+              <input v-model="updatedUser.email" type="email" :disabled="!isEditing" />
+            </p>
+            <p><strong>Age:</strong>
+              <input v-model="updatedUser.age" type="number" :disabled="!isEditing" />
+            </p>
+            <p><strong>Location:</strong>
+              <input v-model="updatedUser.location" :disabled="!isEditing" />
+            </p>
+            <p><strong>Rating:</strong>
+              <input v-model="updatedUser.rating" type="number" :disabled="!isEditing" />
+            </p>
+          </div>
         </div>
         <div class="profile-edit">
           <h3>Edit Profile</h3>
           <form @submit.prevent="handleUpdate">
-            <input v-model="updatedUser.username" placeholder="Username" />
-            <input v-model="updatedUser.email" type="email" placeholder="Email" />
-            <input v-model="updatedUser.age" type="number" placeholder="Age" />
-            <input v-model="updatedUser.location" placeholder="Location" />
-            <input v-model="updatedUser.rating" type="number" placeholder="Rating" />
-  
             <input type="file" @change="handleFileUpload" accept="image/*" />
-            <button type="submit">Update Profile</button>
+            <button type="submit" :disabled="!isEditing">Update Profile</button>
+            <button type="button" @click="toggleEdit">{{ isEditing ? 'Cancel' : 'Edit' }}</button>
           </form>
         </div>
       </div>
@@ -47,8 +54,12 @@
     rating: user.value.rating,
   });
   
+  // Store original user data for cancel functionality
+  let originalUserData = { ...updatedUser.value };
+  
   // Reactive reference for the profile picture
   const profilePicture = ref(null);
+  const isEditing = ref(false); // State to track if editing is enabled
   
   // Watch for changes in user and update the form values accordingly
   watch(user, (newUser) => {
@@ -59,6 +70,8 @@
       location: newUser.location,
       rating: newUser.rating,
     };
+    // Update original user data whenever user data changes
+    originalUserData = { ...updatedUser.value };
   }, { immediate: true });
   
   // Function to handle profile picture upload
@@ -68,7 +81,6 @@
       const reader = new FileReader();
       reader.onload = async (e) => {
         const imageData = e.target.result; // Base64 image data
-        // Here, you can implement your own logic to handle the image data as needed
         profilePicture.value = imageData; // Preview the uploaded image
       };
       reader.readAsDataURL(file);
@@ -79,6 +91,19 @@
   const handleUpdate = () => {
     userStore.updateUserDetails(updatedUser.value); // Update the store with new data
     alert('Profile updated successfully!');
+    isEditing.value = false; // Disable editing after update
+  };
+  
+  // Function to toggle editing state
+  const toggleEdit = () => {
+    if (isEditing.value) {
+      // If editing is currently enabled, revert to original data
+      updatedUser.value = { ...originalUserData };
+    } else {
+      // If not editing, enable editing mode
+      originalUserData = { ...updatedUser.value }; // Save the current state as original
+    }
+    isEditing.value = !isEditing.value;
   };
   </script>
   
@@ -99,6 +124,13 @@
   .profile-details {
     flex: 1; /* Allow this section to grow */
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .details {
+    text-align: left; /* Align text to the left for better readability */
   }
   
   .profile-edit {
@@ -116,8 +148,11 @@
   }
   
   input {
-    margin-bottom: 10px;
-    display: block; /* Ensure inputs are block elements for layout */
+    margin-left: 10px; /* Add space between label and input */
+  }
+  
+  button {
+    margin-top: 10px; /* Add some space between buttons */
   }
   </style>
   
