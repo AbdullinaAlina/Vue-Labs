@@ -2,8 +2,15 @@
     <div class="auth-overlay" v-if="isOpen" @click.self="closeOverlay">
       <div class="overlay__content">
         <h2>Authentication</h2>
-        <button @click="showLoginOverlay">Login</button>
-        <button @click="redirectToRegister">Register</button>
+        <div v-if="!user.isAuth">
+          <button @click="showLoginOverlay">Login</button>
+          <button @click="redirectToRegister">Register</button>
+        </div>
+        <div v-else>
+          <h3>Welcome, {{ user.username }}!</h3>
+          <button @click="navigateToProfile">My Profile</button>
+          <button @click="handleLogout">Log Out</button>
+        </div>
   
         <div v-if="showRegisterForm">
           <h3>Register</h3>
@@ -21,9 +28,10 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue'; // Import computed
   import { useRouter } from 'vue-router';
-
+  import { useUserStore } from '~/stores/userStore'; // Import user store
+  
   import LoginOverlay from './LoginOverlay.vue';
   
   const props = defineProps({
@@ -38,6 +46,7 @@
   });
   
   const router = useRouter();
+  const userStore = useUserStore(); // Get user store instance
   const email = ref('');
   const password = ref('');
   const name = ref('');
@@ -54,9 +63,9 @@
   };
   
   const redirectToRegister = () => {
-  props.onClose(); // Close the authentication overlay
-  router.push('/register'); // Navigate to the /register page
-};
+    props.onClose(); // Close the authentication overlay
+    router.push('/register'); // Navigate to the /register page
+  };
   
   const showLoginOverlay = () => {
     isLoginOverlayOpen.value = true;
@@ -67,55 +76,20 @@
   };
   
   const handleRegister = () => {
-    console.log('Registering user', name.value, email.value, password.value);
+    userStore.register(email.value, password.value, name.value); // Adjust parameters as needed
     closeOverlay();
   };
+  
+  const handleLogout = () => {
+    userStore.logout();
+    closeOverlay();
+  };
+  
+  const navigateToProfile = () => {
+    router.push(`/user/${userStore.user.email}`); // Change this based on your routing logic
+  };
+  
+  // Create a computed property to access user data
+  const user = computed(() => userStore.user);
   </script>
-  
-  <style scoped>
-  .auth-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: flex-end; /* Adjust to open from the right side */
-    align-items: flex-start;
-    z-index: 10;
-  }
-  
-  .overlay__content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    width: 300px; /* Ensure the width is enough for the form */
-    margin: 16px; /* Add some margin to prevent sticking to the edges */
-  }
-  
-  input {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
-  }
-  
-  button {
-    margin-top: 10px;
-    padding: 8px 12px;
-    background-color: #43ef27;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #36c320;
-  }
-  
-  h2, h3 {
-    margin-bottom: 16px;
-  }
-  </style>
   

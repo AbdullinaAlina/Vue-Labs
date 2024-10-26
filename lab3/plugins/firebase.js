@@ -17,6 +17,8 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 
+export { auth }; // Named export for auth
+
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.provide('auth', auth);
 });
