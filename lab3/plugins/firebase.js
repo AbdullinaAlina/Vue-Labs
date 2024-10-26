@@ -1,9 +1,11 @@
-// plugins/firebase.js
-import { defineNuxtPlugin } from '#app';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth"
 
-// Firebase configuration object
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDxIgzGTdI1ukLHQC6NM_Zq_FdXAoIgDQw",
   authDomain: "nuxt-blog-53c9f.firebaseapp.com",
@@ -13,10 +15,6 @@ const firebaseConfig = {
   appId: "1:370473189327:web:12191429d2fa18a4121cba"
 };
 
-// Initialize Firebase and export auth
-const firebaseApp = initializeApp(firebaseConfig);
-const auth = getAuth(firebaseApp);
-
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.provide('auth', auth);
-});
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app)

@@ -1,4 +1,4 @@
-Sidebar.vue
+<!-- Sidebar.vue -->
 
 <template>
     <div class="sidebar">
@@ -38,6 +38,10 @@ Sidebar.vue
   <script setup>
   import { ref, defineEmits } from 'vue';
   import AuthOverlay from './AuthOverlay.vue';
+  import { useUserStore } from '~/stores/userStore';
+
+  const userStore = useUserStore();
+
   
   // Define emits for the component
   const emit = defineEmits(['categorySelected']);
@@ -58,6 +62,10 @@ Sidebar.vue
   
   // Open and close overlay methods
   const toggleOverlay = () => {
+    if (userStore.user.isAuth) {
+    // Display profile options if user is authenticated
+    console.log('Display My Profile and Log Out options');
+  }
     isOverlayOpen.value = !isOverlayOpen.value;
   };
   
