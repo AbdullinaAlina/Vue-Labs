@@ -8,7 +8,7 @@
         </div>
         <div v-else>
           <h3>Welcome, {{ user.username }}!</h3>
-          <button @click="navigateToProfile">My Profile</button>
+          <router-link to="/profile">My Profile</router-link>
           <button @click="handleLogout">Log Out</button>
         </div>
   

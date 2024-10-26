@@ -53,5 +53,13 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
-  return { user, register, login, logout };
+  const updateUserDetails = (updatedData) => {
+    user.value.username = updatedData.username || user.value.username;
+    user.value.email = updatedData.email || user.value.email;
+    user.value.age = updatedData.age || user.value.age;
+    user.value.location = updatedData.location || user.value.location;
+    user.value.rating = updatedData.rating || user.value.rating;
+  };
+
+  return { user, register, login, logout, updateUserDetails };
 });
