@@ -1,18 +1,35 @@
+<!-- LoginOverlay.vue -->
+
 <template>
     <div class="login-overlay" v-if="isOpen" @click.self="closeOverlay">
       <div class="overlay__content">
         <h3>Login</h3>
         <form @submit.prevent="handleLogin">
-          <input type="text" placeholder="Username" v-model="email" />
-          <input type="password" placeholder="Password" v-model="password" />
+          <input type="email" placeholder="Email" v-model="email" required />
+          <input type="password" placeholder="Password" v-model="password" required />
           <button type="submit">Login</button>
         </form>
+        <p @click="showForgotPassword" class="forgot-password">Forgot Password?</p>
+      </div>
+  
+      <div v-if="isForgotPassword" class="forgot-password-overlay">
+        <h3>Reset Password</h3>
+        <form @submit.prevent="handleResetPassword">
+          <input type="email" placeholder="Email" v-model="resetEmail" required />
+          <button type="submit">Send Reset Email</button>
+        </form>
+        <p @click="closeForgotPassword">Cancel</p>
       </div>
     </div>
   </template>
   
   <script setup>
+  import { useRouter } from 'vue-router';
   import { ref } from 'vue';
+  import { useNuxtApp } from '#app'; // Import to access Nuxt app
+  import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+  
+  const router = useRouter();
   
   const props = defineProps({
     isOpen: {
@@ -27,16 +44,54 @@
   
   const email = ref('');
   const password = ref('');
+  const resetEmail = ref('');
+  const isForgotPassword = ref(false);
+  const { $auth } = useNuxtApp(); // Get auth instance from Nuxt app
   
   const closeOverlay = () => {
     email.value = '';
     password.value = '';
+    resetEmail.value = '';
+    isForgotPassword.value = false;
     props.onClose();
   };
   
-  const handleLogin = () => {
-    console.log('Logging in with', email.value, password.value);
-    closeOverlay();
+  const handleLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword($auth, email.value, password.value);
+      const user = userCredential.user;
+      console.log('Logged in user:', user);
+  
+      // Optional: Redirect to another page after successful login
+      // router.push('/register');
+  
+      closeOverlay(); // Close the overlay after successful login
+    } catch (error) {
+      console.error('Error logging in:', error);
+      alert('Login failed: ' + error.message); // Show error message
+    }
+  };
+  
+  // Show forgot password form
+  const showForgotPassword = () => {
+    isForgotPassword.value = true;
+  };
+  
+  // Close forgot password form
+  const closeForgotPassword = () => {
+    isForgotPassword.value = false;
+  };
+  
+  // Handle password reset email
+  const handleResetPassword = async () => {
+    try {
+      await sendPasswordResetEmail($auth, resetEmail.value);
+      alert('Password reset email sent!');
+      closeForgotPassword();
+    } catch (error) {
+      console.error('Error sending password reset email:', error);
+      alert('Error: ' + error.message);
+    }
   };
   </script>
   
@@ -84,6 +139,20 @@
   
   h3 {
     margin-bottom: 16px;
+  }
+  
+  .forgot-password {
+    color: blue;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .forgot-password-overlay {
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
   }
   </style>
   

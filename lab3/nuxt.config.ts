@@ -11,5 +11,6 @@ export default defineNuxtConfig({
       solid: ['bars', 'user', 'star', 'star-half', 'star-half-stroke', 'thumbs-up', 'chevron-right', 'chevron-left'],
       regular: ['star', 'star-half','star-half-stroke']
     }
-  }
+  },
+  plugins: [{ src: '~/plugins/firebase.js', mode: 'client' }],
 })

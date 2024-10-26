@@ -1,3 +1,5 @@
+Sidebar.vue
+
 <template>
     <div class="sidebar">
       <div

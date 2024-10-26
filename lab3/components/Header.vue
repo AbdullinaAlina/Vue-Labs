@@ -1,3 +1,4 @@
+
 <template>
     <div class="header">
       <div class="sidebar__icon" @click="toggleSideBar">

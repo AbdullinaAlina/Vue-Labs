@@ -21,7 +21,10 @@
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
   import AccountConfirmationOverlay from '~/components/AccountConfirmationOverlay.vue';
+  import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+
   
+  const { $auth } = useNuxtApp();
   const email = ref('');
   const username = ref('');
   const password = ref('');
@@ -29,18 +32,35 @@
   const isOverlayOpen = ref(false);
   const router = useRouter();
   
-  const handleRegister = () => {
-    if (password.value !== confirmPassword.value) {
-      alert("Passwords don't match!");
-      return;
-    }
-  
-    // Simulate registration logic (replace with actual API call)
-    console.log("User registered:", { email: email.value, username: username.value, password: password.value });
-  
+  const handleRegister = async () => {
+  if (password.value !== confirmPassword.value) {
+    alert("Passwords don't match!");
+    return;
+  }
+
+  try {
+    // Firebase Registration
+    const userCredential = await createUserWithEmailAndPassword(
+      $auth,
+      email.value,
+      password.value
+    );
+    const user = userCredential.user;
+
+    // Send verification email
+    await sendEmailVerification(user);
+    console.log("User registered and verification email sent:", user);
+
     // Open the confirmation overlay
     isOverlayOpen.value = true;
-  };
+
+    // Optional: Redirect to another page after registration
+    router.push('/');
+  } catch (error) {
+    console.error("Error registering user:", error);
+    alert("Registration failed: " + error.message);
+  }
+};
   </script>
   
   <style scoped>
