@@ -4,11 +4,11 @@
       <div class="profile-content" v-if="user.isAuth">
         <div class="profile-details">
           <img :src="profilePicture" alt="Profile Picture" v-if="profilePicture" class="profile-pic" />
-          <p><strong>Username:</strong> {{ updatedUser.username }}</p>
-          <p><strong>Email:</strong> {{ updatedUser.email }}</p>
-          <p><strong>Age:</strong> {{ updatedUser.age }}</p>
-          <p><strong>Location:</strong> {{ updatedUser.location }}</p>
-          <p><strong>Rating:</strong> {{ updatedUser.rating }}</p>
+          <p><strong>Username:</strong> </p>
+          <p><strong>Email:</strong> </p>
+          <p><strong>Age:</strong> </p>
+          <p><strong>Location:</strong> </p>
+          <p><strong>Rating:</strong></p>
         </div>
         <div class="profile-edit">
           <h3>Edit Profile</h3>
@@ -33,8 +33,6 @@
   <script setup>
   import { useUserStore } from '~/stores/userStore';
   import { computed, ref, watch } from 'vue';
-  import { storage } from '~/plugins/firebase'; // Ensure storage is imported
-  import { ref as storageRef, uploadString, getDownloadURL } from 'firebase/storage';
   
   // Access the user store
   const userStore = useUserStore();
@@ -70,20 +68,8 @@
       const reader = new FileReader();
       reader.onload = async (e) => {
         const imageData = e.target.result; // Base64 image data
-        const storageRef = storageRef(storage, `profile_pictures/${user.value.email}.png`);
-        
-        try {
-          // Upload the image
-          await uploadString(storageRef, imageData, 'data_url');
-          
-          // Get the download URL
-          const url = await getDownloadURL(storageRef);
-          profilePicture.value = url; // Update profile picture preview
-          // Store the URL in the user store
-          userStore.updateUserDetails({ profilePicture: url });
-        } catch (error) {
-          console.error('Error uploading profile picture:', error);
-        }
+        // Here, you can implement your own logic to handle the image data as needed
+        profilePicture.value = imageData; // Preview the uploaded image
       };
       reader.readAsDataURL(file);
     }
