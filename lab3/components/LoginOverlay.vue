@@ -132,14 +132,15 @@ const userStore = useUserStore();
   button {
     margin-top: 10px;
     padding: 8px 12px;
-    background-color: #43ef27;
+    background-color: #5bb9cd;
     color: white;
     border: none;
     cursor: pointer;
+    width: 100%;
   }
   
   button:hover {
-    background-color: #36c320;
+    background-color: #4da0b3;
   }
   
   h3 {

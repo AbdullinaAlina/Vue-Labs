@@ -41,10 +41,14 @@
   import Post from '~/components/Post.vue';
   
   const store = useStore();
+  const userStore = useUserStore();
+
   const route = useRoute();
   
   const userId = route.params.id;
   
+
+
   const user = computed(() => {
     return store.users.find(user => user.id === Number(userId)) || null;
   });  
@@ -76,11 +80,12 @@
       currentPage.value++;
     }
   };
-  
-  const followUser = () => {
-    console.log("Followed user:", user.value.name);
-    // Implement follow functionality here later
-  };
+   const followUser = () => {
+  userStore.followUser(user.value.id); // Assuming user.id is the user's ID
+  console.log("Followed user:", user.value.name);
+};
+ 
+
   </script>
   
   <style scoped>

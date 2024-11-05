@@ -24,14 +24,7 @@
         </ul>
         
         <!-- Display authentication options based on user authentication status -->
-        <div v-if="user.isAuth">
-          <li @click="goToProfile">My Profile</li>
-          <li @click="logout">Log Out</li>
-        </div>
-        <div v-else>
-          <li @click="showLoginOverlay">Login</li>
-          <li @click="redirectToRegister">Register</li>
-        </div>
+
       </div>
   
       <div class="profile-icon" @click="toggleOverlay">

@@ -1,6 +1,9 @@
 <template>
     <div class="profile-page">
-      <h2>User Profile</h2>
+      <div class="header">
+        <h2>User Profile</h2>
+        <p v-if="user.isAuth">Welcome, {{ user.username }}!</p>
+      </div>
       <div class="profile-content" v-if="user.isAuth">
         <div class="profile-details">
           <img :src="profilePicture" alt="Profile Picture" v-if="profilePicture" class="profile-pic" />
@@ -30,6 +33,14 @@
             <button type="button" @click="toggleEdit">{{ isEditing ? 'Cancel' : 'Edit' }}</button>
           </form>
         </div>
+        <div class="followed-users">
+          <h3>Followed Users</h3>
+          <ul>
+            <li v-for="(followedUserId, index) in user.followedUsers" :key="index">
+              {{ getUserById(followedUserId)?.username || 'Unknown User' }}
+            </li>
+          </ul>
+        </div>
       </div>
       <div v-else>
         <p>Please log in to see your profile information.</p>
@@ -41,11 +52,9 @@
   import { useUserStore } from '~/stores/userStore';
   import { computed, ref, watch } from 'vue';
   
-  // Access the user store
   const userStore = useUserStore();
   const user = computed(() => userStore.user);
   
-  // Local state for updated user data
   const updatedUser = ref({
     username: user.value.username,
     email: user.value.email,
@@ -54,14 +63,10 @@
     rating: user.value.rating,
   });
   
-  // Store original user data for cancel functionality
   let originalUserData = { ...updatedUser.value };
-  
-  // Reactive reference for the profile picture
   const profilePicture = ref(null);
-  const isEditing = ref(false); // State to track if editing is enabled
+  const isEditing = ref(false);
   
-  // Watch for changes in user and update the form values accordingly
   watch(user, (newUser) => {
     updatedUser.value = {
       username: newUser.username,
@@ -70,73 +75,87 @@
       location: newUser.location,
       rating: newUser.rating,
     };
-    // Update original user data whenever user data changes
     originalUserData = { ...updatedUser.value };
   }, { immediate: true });
   
-  // Function to handle profile picture upload
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = async (e) => {
-        const imageData = e.target.result; // Base64 image data
-        profilePicture.value = imageData; // Preview the uploaded image
+        const imageData = e.target.result;
+        profilePicture.value = imageData;
       };
       reader.readAsDataURL(file);
     }
   };
   
-  // Function to handle profile update
   const handleUpdate = () => {
-    userStore.updateUserDetails(updatedUser.value); // Update the store with new data
+    userStore.updateUserDetails(updatedUser.value);
     alert('Profile updated successfully!');
-    isEditing.value = false; // Disable editing after update
+    isEditing.value = false;
   };
   
-  // Function to toggle editing state
   const toggleEdit = () => {
     if (isEditing.value) {
-      // If editing is currently enabled, revert to original data
       updatedUser.value = { ...originalUserData };
     } else {
-      // If not editing, enable editing mode
-      originalUserData = { ...updatedUser.value }; // Save the current state as original
+      originalUserData = { ...updatedUser.value };
     }
     isEditing.value = !isEditing.value;
+  };
+  
+  const getUserById = (id) => {
+    return userStore.users.find(user => user.id === id) || null;
   };
   </script>
   
   <style scoped>
   .profile-page {
     padding: 20px;
-    display: flex; /* Use flexbox to layout the profile page */
+    display: flex;
     flex-direction: column;
     align-items: center;
+    background-image: url('/assets/background.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+    color: #fff;
   }
   
   .profile-content {
-    display: flex; /* Flexbox for side-by-side layout */
-    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
     width: 100%;
   }
   
   .profile-details {
-    flex: 1; /* Allow this section to grow */
-    padding: 20px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    margin-bottom: 20px;
   }
   
   .details {
-    text-align: left; /* Align text to the left for better readability */
+    text-align: left;
+    flex: 1;
   }
   
   .profile-edit {
-    flex: 1; /* Allow this section to grow */
     padding: 20px;
-    border-left: 1px solid #ccc; /* Optional: add a separator */
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    margin-bottom: 20px;
   }
   
   .profile-pic {
@@ -144,15 +163,24 @@
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 20px;
+    margin-right: 20px;
   }
   
   input {
-    margin-left: 10px; /* Add space between label and input */
+    margin-left: 10px;
   }
   
   button {
-    margin-top: 10px; /* Add some space between buttons */
+    margin-top: 10px;
+  }
+  
+  .followed-users {
+    margin-top: 20px;
+  }
+  
+  .followed-users ul {
+    list-style: none;
+    padding: 0;
   }
   </style>
   

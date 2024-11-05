@@ -80,14 +80,15 @@
   
   button {
     padding: 10px 15px;
-    background-color: #43ef27;
+    background-color: #5bb9cd;
     color: white;
     border: none;
     cursor: pointer;
+    width: 100%;
   }
   
   button:hover {
-    background-color: #36c320;
+    background-color: #4e9fb2;
   }
   </style>
   
