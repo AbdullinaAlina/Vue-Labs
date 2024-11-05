@@ -81,8 +81,8 @@
     }
   };
    const followUser = () => {
-  userStore.followUser(user.value.id); // Assuming user.id is the user's ID
-  console.log("Followed user:", user.value.name);
+    userStore.followUser(user.value.id); // Assuming user.id is the user's ID
+    console.log("Followed user:", user.value.name);
 };
  
 

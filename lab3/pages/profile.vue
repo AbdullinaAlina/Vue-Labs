@@ -1,3 +1,5 @@
+<!-- profile.vue -->
+
 <template>
     <div class="profile-page">
       <div class="header">
@@ -37,7 +39,7 @@
           <h3>Followed Users</h3>
           <ul>
             <li v-for="(followedUserId, index) in user.followedUsers" :key="index">
-              {{ getUserById(followedUserId)?.username || 'Unknown User' }}
+              {{ getUserById(followedUserId)?.name || 'Unknown User' }}
             </li>
           </ul>
         </div>
@@ -50,11 +52,17 @@
   
   <script setup>
   import { useUserStore } from '~/stores/userStore';
+  import { useStore } from '~/stores/useStore';
   import { computed, ref, watch } from 'vue';
   
   const userStore = useUserStore();
   const user = computed(() => userStore.user);
-  
+  const store = useStore();
+
+  const getUserById = (id) => {
+    return store.users.find(user => user.id === id) || null;
+  };
+
   const updatedUser = ref({
     username: user.value.username,
     email: user.value.email,
@@ -105,9 +113,6 @@
     isEditing.value = !isEditing.value;
   };
   
-  const getUserById = (id) => {
-    return userStore.users.find(user => user.id === id) || null;
-  };
   </script>
   
   <style scoped>
