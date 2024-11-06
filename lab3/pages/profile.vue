@@ -1,5 +1,4 @@
 <template>
-  <Uploaddata />
   <div class="profile-page">
     <div class="header">
       <h2>User Profile</h2>
@@ -44,6 +43,7 @@
             :key="post.id"
             :post="post" 
             :user="getUserById(post.userId)"
+             @delete-post="deletePost"
           />
         </div>
         <div class="pagination">
@@ -77,14 +77,29 @@
 import { useUserStore } from '~/stores/userStore';
 import { useStore } from '~/stores/useStore';
 import { computed, ref, watch } from 'vue';
+import { db } from '~/plugins/firebase';
+import { doc, deleteDoc } from 'firebase/firestore';
+
 import Post from '~/components/Post.vue';
-import Uploaddata from '~/components/Uploaddata.vue';
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
 const store = useStore();
 
-const userPosts = store.posts.filter((post) => post.userId === user.value.id);
+const userPosts = computed(() => {
+    return store.posts.filter((post) => post.userId === user.value.id)
+  });
+
+const deletePost = async (postId) => {
+  try {
+    // Delete post from Firestore
+    await deleteDoc(doc(db, 'posts', postId));
+    alert('Post deleted successfully');
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    alert('Failed to delete post.');
+  }
+};
 
 const getUserById = (id) => {
   return store.users.find(user => user.id === id) || null;
@@ -121,7 +136,7 @@ const totalPages = computed(() => Math.ceil(userPosts.length / itemsPerPage));
 const paginatedPosts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  return userPosts.slice(start, end);
+  return userPosts.value.slice(start, end);
 });
 
 const prevPage = () => {
