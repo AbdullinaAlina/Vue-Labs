@@ -2,6 +2,7 @@
 import { defineNuxtPlugin } from '#app';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 // Firebase configuration object
 const firebaseConfig = {
@@ -16,9 +17,11 @@ const firebaseConfig = {
 // Initialize Firebase and export auth
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
 
-export { auth }; // Named export for auth
+export { auth, db }; // Named export for auth
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.provide('auth', auth);
+  nuxtApp.provide('db', db);
 });

@@ -26,6 +26,8 @@ export const useStore = defineStore('main', {
         ],
         posts: [
             { userId: 1, PubDate: "2024-09-26", Rating: 5, Commentary: "This is awesome!", Topic: "Design", isLiked: false, likeCount: 0 },
+            { userId: 1, PubDate: "2024-09-26", Rating: 5, Commentary: "This is awesome!", Topic: "Design", isLiked: false, likeCount: 0 },
+            { userId: 1, PubDate: "2024-09-26", Rating: 5, Commentary: "This is awesome!", Topic: "Design", isLiked: false, likeCount: 0 },
             { userId: 1, PubDate: "2024-09-27", Rating: 5, Commentary: "This is my second post!", Topic: "Science", isLiked: false, likeCount: 0 },
             { userId: 2, PubDate: "2024-09-25", Rating: 4, Commentary: "I lost the exit.", Topic: "Health", isLiked: false, likeCount: 1 },
             { userId: 3, PubDate: "2024-09-24", Rating: 5, Commentary: "Emotions overload!", Topic: "Science", isLiked: false, likeCount: 0 },

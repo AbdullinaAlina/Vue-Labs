@@ -9,6 +9,7 @@ export const useUserStore = defineStore('user', () => {
     const mainStore = useStore();
     const user = ref({
         isAuth: false,
+        id: '',
         username: '',
         email: '',
         age: null,
@@ -20,6 +21,7 @@ export const useUserStore = defineStore('user', () => {
   // Set user details after authentication
   const setUserDetails = (userData) => {
     user.value.isAuth = true;
+    user.value.id = userData.id || '';
     user.value.username = userData.name || '';
     user.value.email = userData.email || '';
     user.value.age = userData.age || null;
