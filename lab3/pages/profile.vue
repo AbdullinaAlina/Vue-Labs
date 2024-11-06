@@ -19,8 +19,8 @@
             <p><strong>Age:</strong>
               <input v-model="updatedUser.age" type="number" :disabled="!isEditing" />
             </p>
-            <p><strong>Location:</strong>
-              <input v-model="updatedUser.location" :disabled="!isEditing" />
+            <p><strong>address:</strong>
+              <input v-model="updatedUser.address" :disabled="!isEditing" />
             </p>
             <p><strong>Rating:</strong>
               <input v-model="updatedUser.rating" type="number" :disabled="!isEditing" />
@@ -67,7 +67,7 @@
     username: user.value.username,
     email: user.value.email,
     age: user.value.age,
-    location: user.value.location,
+    address: user.value.address,
     rating: user.value.rating,
   });
   
@@ -80,7 +80,7 @@
       username: newUser.username,
       email: newUser.email,
       age: newUser.age,
-      location: newUser.location,
+      address: newUser.address,
       rating: newUser.rating,
     };
     originalUserData = { ...updatedUser.value };

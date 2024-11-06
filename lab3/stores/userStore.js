@@ -3,37 +3,39 @@ import { defineStore } from 'pinia';
 import { auth } from '~/plugins/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { ref } from 'vue';
+import { useStore } from './useStore';
 
 export const useUserStore = defineStore('user', () => {
-  const user = ref({
-    isAuth: false,
-    username: '',
-    email: '',
-    age: null,
-    location: '',
-    rating: 0,
-    followedUsers: [], // Array to store followed users
+    const mainStore = useStore();
+    const user = ref({
+        isAuth: false,
+        username: '',
+        email: '',
+        age: null,
+        address: '',
+        rating: 0,
+        followedUsers: [], // Array to store followed users
   });
 
   // Set user details after authentication
   const setUserDetails = (userData) => {
     user.value.isAuth = true;
-    user.value.username = userData.username || '';
+    user.value.username = userData.name || '';
     user.value.email = userData.email || '';
     user.value.age = userData.age || null;
-    user.value.location = userData.location || '';
+    user.value.address = userData.address || '';
     user.value.rating = userData.rating || 0;
   };
 
   // Register a new user
-  const register = async (email, password, username, age, location, rating) => {
+  const register = async (email, password, username, age, address, rating) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userData = {
         email,
         username,
         age,
-        location,
+        address,
         rating,
       };
       setUserDetails(userData);
@@ -47,10 +49,16 @@ export const useUserStore = defineStore('user', () => {
   const login = async (email, password) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      user.value.isAuth = true;
-      user.value.email = email;
       console.log('User logged in:', userCredential.user);
-      // Retrieve and set user details from database here if needed
+
+      const matchedUser = mainStore.users.find((user) => user.email === email);
+      console.log(matchedUser);
+
+      if (matchedUser) {
+        setUserDetails(matchedUser);
+      } else {
+        console.warn('User not found in local users list');
+      }
     } catch (error) {
       console.error('Login error:', error);
     }
@@ -60,7 +68,7 @@ export const useUserStore = defineStore('user', () => {
   const logout = async () => {
     try {
       await signOut(auth);
-      user.value = { isAuth: false, username: '', email: '', age: null, location: '', rating: 0, followedUsers: [] };
+      user.value = { isAuth: false, username: '', email: '', age: null, address: '', rating: 0, followedUsers: [] };
       console.log('User logged out');
     } catch (error) {
       console.error('Logout error:', error);
@@ -72,7 +80,7 @@ export const useUserStore = defineStore('user', () => {
     user.value.username = updatedData.username || user.value.username;
     user.value.email = updatedData.email || user.value.email;
     user.value.age = updatedData.age || user.value.age;
-    user.value.location = updatedData.location || user.value.location;
+    user.value.address = updatedData.address || user.value.address;
     user.value.rating = updatedData.rating || user.value.rating;
   };
 

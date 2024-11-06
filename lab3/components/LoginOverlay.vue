@@ -26,11 +26,12 @@
   <script setup>
   import { useRouter } from 'vue-router';
   import { ref } from 'vue';
+  import { useUserStore } from '~/stores/userStore';  // Import user store
+  const userStore = useUserStore(); 
   
   import { useNuxtApp } from '#app'; // Import to access Nuxt app
   import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 
-const userStore = useUserStore();
   
   const router = useRouter();
   
@@ -61,14 +62,7 @@ const userStore = useUserStore();
   
   const handleLogin = async () => {
   try {
-    const userCredential = await signInWithEmailAndPassword($auth, email.value, password.value);
-    const user = userCredential.user;
-    console.log('Logged in user:', user);
-    
-    // Update the user store with authenticated user information
-    userStore.user.isAuth = true; // Set isAuth to true
-    userStore.user.username = user.displayName || ''; // Set username (if available)
-    userStore.user.email = user.email; // Set email
+    await userStore.login(email.value, password.value); 
 
     closeOverlay(); // Close the overlay after successful login
   } catch (error) {

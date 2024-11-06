@@ -6,7 +6,7 @@
         <img :src="user.Avatar" alt="User Avatar" />
         <p>Name: {{ user.name }}</p>
         <p>Age: {{ user.age }}</p>
-        <p>Location: {{ user.address }}</p>
+        <p>address: {{ user.address }}</p>
         <button @click="followUser">Follow</button>
   
         <h2>Latest Posts</h2>
