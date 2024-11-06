@@ -13,13 +13,13 @@ export const useStore = defineStore('main', {
             onSnapshot(usersCollection, (snapshot) => {
               this.users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             });
-          },
-          fetchPosts() {
+        },
+        fetchPosts() {
             const postsCollection = collection(db, "posts");
             onSnapshot(postsCollection, (snapshot) => {
               this.posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             });
-          },
+        },
         async uploadDataToFirestore() {
           try {
             // Upload users
@@ -36,6 +36,9 @@ export const useStore = defineStore('main', {
           } catch (error) {
             console.error("Error uploading data to Firestore:", error);
           }
-        }
+        },
+        getUserById(userId) {
+            return this.users.find(user => user.id === userId);
+        },
     }
 });

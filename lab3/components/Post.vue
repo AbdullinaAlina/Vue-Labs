@@ -1,6 +1,5 @@
 <!-- components/Post.vue -->
 
-
 <template>
     <div class="card">
       <div class="card__header">
@@ -20,9 +19,6 @@
             <p class="card__date">{{ formattedPubDate }}</p>
           </div>
         
-          
-
-  
           <div class="card__rating">
             <font-awesome
                 v-for="star in Math.floor(post.likeCount / 4)"
@@ -62,12 +58,17 @@
   
   <script>
   import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
-  
+  import { useStore } from "../stores/useStore";
+
   export default {
     props: {
       post: Object,
-      user: Object,
     },
+    data() {
+    return {
+      user: null, // Store the user data for each post
+    };
+  },
     computed: {
       formattedPubDate() {
         const pubDate = new Date(this.post.PubDate);
@@ -90,7 +91,20 @@
         this.post.isLiked = !this.post.isLiked;
         this.post.likeCount += this.post.isLiked ? 1 : -1;
       },
+      // Fetch the user data based on userId
+      fetchUser() {
+        const userStore = useStore(); // Access the Pinia store
+        this.user = userStore.getUserById(this.post.userId); // Assuming you have a method to get user by ID
+      },
     },
+    watch: {
+      post: {
+        immediate: true,
+        handler() {
+          this.fetchUser(); // Fetch the user data whenever the post changes
+        },
+    },
+  },
   };
   </script>
   

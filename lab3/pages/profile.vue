@@ -42,8 +42,7 @@
             v-for="post in paginatedPosts"
             :key="post.id"
             :post="post" 
-            :user="getUserById(post.userId)"
-             @delete-post="deletePost"
+            @delete-post="deletePost"
           />
         </div>
         <div class="pagination">
@@ -131,7 +130,7 @@ watch(user, (newUser) => {
 // Pagination Setup
 const currentPage = ref(1);
 const itemsPerPage = 2;  // Change to 2 posts per page
-const totalPages = computed(() => Math.ceil(userPosts.length / itemsPerPage));
+const totalPages = computed(() => Math.ceil(userPosts.value.length / itemsPerPage));
 
 const paginatedPosts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;

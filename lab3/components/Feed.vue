@@ -32,7 +32,6 @@
     <Post 
       v-for="post in paginatedPosts"
       :post="post" 
-      :user="getUserById(post.userId)"
     />
   </div>
 
