@@ -1,4 +1,6 @@
 import {defineStore} from 'pinia';
+import { db } from "@/plugins/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 export const useStore = defineStore('main', {
     state: () => ({
@@ -49,5 +51,24 @@ export const useStore = defineStore('main', {
             { userId: 19, PubDate: "2024-09-07", Rating: 4, Commentary: "A wonderful surprise!", Topic: "Technology", isLiked: false, likeCount: 3 },
             { userId: 20, PubDate: "2024-09-14", Rating: 5, Commentary: "Masterpiece!", Topic: "Business", isLiked: false, likeCount: 2 }
           ],
-    })
-})
+    }),
+    actions: {
+        async uploadDataToFirestore() {
+          try {
+            // Upload users
+            for (const user of this.users) {
+              await addDoc(collection(db, "users"), user);
+            }
+            console.log("Users uploaded successfully");
+    
+            // Upload posts
+            for (const post of this.posts) {
+              await addDoc(collection(db, "posts"), post);
+            }
+            console.log("Posts uploaded successfully");
+          } catch (error) {
+            console.error("Error uploading data to Firestore:", error);
+          }
+        }
+    }
+});

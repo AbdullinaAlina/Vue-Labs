@@ -1,4 +1,5 @@
 <template>
+  <Uploaddata />
   <div class="profile-page">
     <div class="header">
       <h2>User Profile</h2>
@@ -77,6 +78,7 @@ import { useUserStore } from '~/stores/userStore';
 import { useStore } from '~/stores/useStore';
 import { computed, ref, watch } from 'vue';
 import Post from '~/components/Post.vue';
+import Uploaddata from '~/components/Uploaddata.vue';
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
