@@ -12,6 +12,7 @@
   "dependencies": {
     "@pinia/nuxt": "^0.5.5",
     "@vesp/nuxt-fontawesome": "^1.1.0",
+    "axios": "^1.7.7",
     "date-fns": "^4.1.0",
     "firebase": "^11.0.1",
     "nuxt": "^3.13.0",

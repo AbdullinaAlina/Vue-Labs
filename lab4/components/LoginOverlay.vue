@@ -60,21 +60,24 @@ const userStore = useUserStore();
   };
   
   const handleLogin = async () => {
-  try {
-    const userCredential = await signInWithEmailAndPassword($auth, email.value, password.value);
-    const user = userCredential.user;
-    console.log('Logged in user:', user);
-    
-    // Update the user store with authenticated user information
-    userStore.user.isAuth = true; // Set isAuth to true
-    userStore.user.username = user.displayName || ''; // Set username (if available)
-    userStore.user.email = user.email; // Set email
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: email.value, password: password.value }),
+        });
+        if (!response.ok) throw new Error('Login failed');
 
-    closeOverlay(); // Close the overlay after successful login
-  } catch (error) {
-    console.error('Error logging in:', error);
-    alert('Login failed: ' + error.message); // Show error message
-  }
+        const data = await response.json();
+        console.log('Logged in user:', data);
+        userStore.user.isAuth = true; // Update user store
+        closeOverlay();
+    } catch (error) {
+        console.error('Error logging in:', error);
+        alert('Login failed: ' + error.message);
+    }
 };
   
   // Show forgot password form

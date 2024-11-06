@@ -32,35 +32,37 @@
   const isOverlayOpen = ref(false);
   const router = useRouter();
   
-  const handleRegister = async () => {
-  if (password.value !== confirmPassword.value) {
-    alert("Passwords don't match!");
-    return;
-  }
+  import axios from 'axios';
 
-  try {
-    // Firebase Registration
-    const userCredential = await createUserWithEmailAndPassword(
-      $auth,
-      email.value,
-      password.value
-    );
-    const user = userCredential.user;
+const handleRegister = async () => {
+    if (password.value !== confirmPassword.value) {
+        alert("Passwords don't match!");
+        return;
+    }
 
-    // Send verification email
-    await sendEmailVerification(user);
-    console.log("User registered and verification email sent:", user);
+    try {
+      const csrfToken = document.cookie.split('; ').find(row => row.startsWith('csrftoken=')).split('=')[1];
+        console.log("Retrieved CSRF Token:", csrfToken); // Log the retrieved token
+        console.log("Requesting with CSRF Token:", csrfToken); // Log the token used in the request
 
-    // Open the confirmation overlay
-    isOverlayOpen.value = true;
+        await axios.post('http://127.0.0.1:8000/api/register/', {
+            email: email.value,
+            username: username.value,
+            password: password.value,
+        }, {
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+        });
 
-    // Optional: Redirect to another page after registration
-    router.push('/');
-  } catch (error) {
-    console.error("Error registering user:", error);
-    alert("Registration failed: " + error.message);
-  }
+        console.log("User registered successfully!");
+        // Proceed with the next steps, e.g., showing confirmation overlay
+    } catch (error) {
+        console.error("Error registering user:", error);
+        alert("Registration failed: " + error.message);
+    }
 };
+
   </script>
   
   <style scoped>
