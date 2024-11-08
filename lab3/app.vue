@@ -10,8 +10,12 @@
 import { useStore } from '/stores/useStore';
 
 const store = useStore();
-store.fetchUsers();
-store.fetchPosts();
+
+onMounted(() => {
+  store.fetchUsers();
+  store.fetchPosts();
+});
+
 </script>
 
 <style>

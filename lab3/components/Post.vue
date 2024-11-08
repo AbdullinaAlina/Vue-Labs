@@ -42,23 +42,37 @@
       </div>
       <p class="card__content">{{ post.Commentary }}</p>
   
-      <button
-        class="card__like-button"
-        @click="toggleLike"
-        :style="{ color: post.isLiked ? '#007BFF' : '#cccccc' }"
-      >
-        <font-awesome 
-            :icon="['fas', 'thumbs-up']"
-        />
-        <i class="fa fa-thumbs-up"></i>
-        {{ post.likeCount }}
-      </button>
+      <div class="card__actions">
+        <button
+          class="card__like-button"
+          @click="toggleLike"
+          :style="{ color: post.isLiked ? '#007BFF' : '#cccccc' }"
+        >
+          <font-awesome 
+              :icon="['fas', 'thumbs-up']"
+          />
+          <i class="fa fa-thumbs-up"></i>
+          {{ post.likeCount }}
+        </button>
+
+        <button
+        v-if="isAuthor"
+        class="card__delete-button"
+        @click="deletePost"
+        >
+        Delete
+        </button>
+      </div>
+
     </div>
   </template>
   
   <script>
   import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
   import { useStore } from "../stores/useStore";
+  import { useUserStore } from '~/stores/userStore';  // Import user store
+
+   
 
   export default {
     props: {
@@ -70,6 +84,10 @@
     };
   },
     computed: {
+      isAuthor() {
+        const userStore = useUserStore();
+        return String(userStore.user.id) === String(this.post.userId);
+      },
       formattedPubDate() {
         const pubDate = new Date(this.post.PubDate);
         const now = new Date();
@@ -159,11 +177,24 @@
     width: 56px;
     height: 56px;
   }
+
+  .card__actions {
+    display: flex;
+    justify-content: space-between;
+  }
   
   .card__like-button {
     background-color: #ffffff;
     color: #ffffff;
     padding: 4px 8px;
+  }
+
+  .card__delete-button {
+    text-transform: uppercase;
+    background-color: #EF2757;
+    border-radius: 8px;
+    color: #ffffff;
+    padding: 4px 12px;
   }
   
   .card__rating {
