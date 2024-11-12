@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import { db } from "@/plugins/firebase";
-import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, doc, addDoc, onSnapshot, updateDoc, arrayUnion } from "firebase/firestore";
 
 export const useStore = defineStore('main', {
     state: () => ({
@@ -38,7 +38,27 @@ export const useStore = defineStore('main', {
           }
         },
         getUserById(userId) {
-            return this.users.find(user => user.id === userId);
+            return this.users.find(user => String(user.id) === String(userId));
         },
+        async followUser(currentUserId, followedUserId) {
+            try {
+                const currentUserDocRef = doc(db, 'users', String(currentUserId));
+                const followedUserDocRef = doc(db, 'users', String(followedUserId));
+
+                
+
+                await updateDoc(currentUserDocRef, {
+                    following: arrayUnion(String(followedUserId))
+                }, { merge: true });
+
+                await updateDoc(followedUserDocRef, {
+                    followers: arrayUnion(String(currentUserId))
+                }, { merge: true });
+            }
+            catch (error) {
+                console.log("Error following user", error);
+            }
+
+        }
     }
 });

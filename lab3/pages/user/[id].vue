@@ -44,17 +44,14 @@
   const userStore = useUserStore();
 
   const route = useRoute();
-  
   const userId = route.params.id;
   
-
-
   const user = computed(() => {
-    return store.users.find(user => user.id === Number(userId)) || null;
+    return store.users.find(user => String(user.id) === String(userId)) || null;
   });  
   
   const userPosts = computed(() => {
-    return store.posts.filter(post => post.userId === Number(userId));
+    return store.posts.filter(post => String(post.userId) === String(userId));
   });
   
   const currentPage = ref(1);
@@ -80,12 +77,12 @@
       currentPage.value++;
     }
   };
-   const followUser = () => {
-    userStore.followUser(user.value.id); // Assuming user.id is the user's ID
-    console.log("Followed user:", user.value.name);
-};
- 
 
+  const followUser = () => {
+    console.log(userStore.user.id, String(userId));
+    store.followUser(String(userStore.user.id), String(userId)); // Assuming user.id is the user's ID
+  };
+ 
   </script>
   
   <style scoped>

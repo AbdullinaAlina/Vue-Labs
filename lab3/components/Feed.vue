@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     getUserById(userId) {
-      return this.store.users.find(user => user.id === userId);
+      return this.store.users.find(user => String(user.id) === String(userId));
     },
     formatDate(date) {
     const options = { month: 'short', day: 'numeric', year: 'numeric' };

@@ -1,5 +1,6 @@
 <template>
   <div class="profile-page">
+    <Statistics />
     <div class="header">
       <h2>User Profile</h2>
       <p v-if="user.isAuth">Welcome, {{ user.username }}!</p>
@@ -80,6 +81,7 @@ import { db } from '~/plugins/firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 
 import Post from '~/components/Post.vue';
+import Statistics from '~/components/statistics.vue';
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);

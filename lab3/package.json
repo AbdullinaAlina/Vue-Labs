@@ -12,11 +12,13 @@
   "dependencies": {
     "@pinia/nuxt": "^0.5.5",
     "@vesp/nuxt-fontawesome": "^1.1.0",
+    "chart.js": "^4.4.6",
     "date-fns": "^4.1.0",
     "firebase": "^11.0.1",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.4",
     "vue": "latest",
+    "vue-chartjs": "^5.3.2",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {

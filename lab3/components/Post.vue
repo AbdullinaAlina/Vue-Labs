@@ -194,7 +194,7 @@
     background-color: #EF2757;
     border-radius: 8px;
     color: #ffffff;
-    padding: 4px 12px;
+    padding: px 12px;
   }
   
   .card__rating {
