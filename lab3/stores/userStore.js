@@ -1,9 +1,10 @@
 // stores/userStore.js
 import { defineStore } from 'pinia';
-import { auth } from '~/plugins/firebase';
+import { auth, db } from '~/plugins/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { ref } from 'vue';
 import { useStore } from './useStore';
+import { doc, getDoc, getDocs } from 'firebase/firestore';
 
 export const useUserStore = defineStore('user', () => {
     const mainStore = useStore();
@@ -15,6 +16,7 @@ export const useUserStore = defineStore('user', () => {
         age: null,
         address: '',
         rating: 0,
+        followingUsers: [],
         followedUsers: [], // Array to store followed users
   });
 
@@ -86,17 +88,37 @@ export const useUserStore = defineStore('user', () => {
     user.value.rating = updatedData.rating || user.value.rating;
   };
 
+  const followingUserData = ref([]); // Store the actual data of followed users
+
+    // Fetch data for all followed users based on their IDs
+    const fetchFollowingUserData = async () => {
+        try {
+            const followingData = [];
+            for (const userId of user.value.followingUsers) {
+                const userDocRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    followingData.push({ id: userDoc.id, ...userDoc.data() });
+                }
+            }
+            followingUserData.value = followingData;
+        } catch (error) {
+            console.error('Error fetching followed users:', error);
+        }
+    };
+
+
   // Follow a user
-  const followUser = (userId) => {
-    if (!user.value.followedUsers.includes(userId)) {
-      user.value.followedUsers.push(userId);
-    }
-  };
+  // const followUser = (userId) => {
+  //   if (!user.value.followedUsers.includes(userId)) {
+  //     user.value.followingUsers.push(userId);
+  //   }
+  // };
 
   // Unfollow a user
-  const unfollowUser = (userId) => {
-    user.value.followedUsers = user.value.followedUsers.filter(id => id !== userId);
-  };
+  // const unfollowUser = (userId) => {
+  //   user.value.followingUsers = user.value.followingUsers.filter(id => id !== userId);
+  // };
 
-  return { user, register, login, logout, updateUserDetails, followUser, unfollowUser };
+  return { user, register, login, logout, updateUserDetails, fetchFollowingUserData, followingUserData};
 });

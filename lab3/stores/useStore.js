@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia';
 import { db } from "@/plugins/firebase";
 import { collection, doc, addDoc, onSnapshot, updateDoc, arrayUnion } from "firebase/firestore";
+import { useUserStore } from './userStore';
 
 export const useStore = defineStore('main', {
     state: () => ({
@@ -45,8 +46,6 @@ export const useStore = defineStore('main', {
                 const currentUserDocRef = doc(db, 'users', String(currentUserId));
                 const followedUserDocRef = doc(db, 'users', String(followedUserId));
 
-                
-
                 await updateDoc(currentUserDocRef, {
                     following: arrayUnion(String(followedUserId))
                 }, { merge: true });
@@ -54,6 +53,9 @@ export const useStore = defineStore('main', {
                 await updateDoc(followedUserDocRef, {
                     followers: arrayUnion(String(currentUserId))
                 }, { merge: true });
+
+                const userStore = useUserStore();
+                userStore.user.followingUsers.push(followedUserId);
             }
             catch (error) {
                 console.log("Error following user", error);

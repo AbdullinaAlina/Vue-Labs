@@ -79,9 +79,9 @@
       post: Object,
     },
     data() {
-    return {
-      user: null, // Store the user data for each post
-    };
+      return {
+        user: null, // Store the user data for each post
+      };
   },
     computed: {
       isAuthor() {

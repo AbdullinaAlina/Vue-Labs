@@ -58,12 +58,7 @@
       </div>
 
       <div class="followed-users">
-        <h3>Followed Users</h3>
-        <ul>
-          <li v-for="(followedUserId, index) in user.followedUsers" :key="index">
-            {{ getUserById(followedUserId)?.name || 'Unknown User' }}
-          </li>
-        </ul>
+        <router-link class="following-link" to="/following">Following</router-link>
       </div>
     </div>
 
@@ -88,7 +83,7 @@ const user = computed(() => userStore.user);
 const store = useStore();
 
 const userPosts = computed(() => {
-    return store.posts.filter((post) => post.userId === user.value.id)
+    return store.posts.filter((post) => String(post.userId) === String(user.value.id))
   });
 
 const deletePost = async (postId) => {
@@ -103,7 +98,7 @@ const deletePost = async (postId) => {
 };
 
 const getUserById = (id) => {
-  return store.users.find(user => user.id === id) || null;
+  return store.users.find(user => String(user.id) === String(id)) || null;
 };
 
 const updatedUser = ref({

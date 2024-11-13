@@ -30,7 +30,7 @@
   const userStore = useUserStore(); 
   
   import { useNuxtApp } from '#app'; // Import to access Nuxt app
-  import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+  import { sendPasswordResetEmail } from 'firebase/auth';
 
   
   const router = useRouter();
