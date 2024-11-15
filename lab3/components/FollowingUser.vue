@@ -12,7 +12,11 @@
         </NuxtLink>
         <div>
             <button class="user__unfollow">Unfollow</button>
-            <button class="user__chat">Chat</button>
+                <button class="user__chat">Chat</button>
+                <NuxtLink to="/chats/1">
+                    Chat with user 2
+                </NuxtLink>
+            
 
         </div>
 

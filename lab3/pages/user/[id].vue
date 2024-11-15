@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="profile">
       <h1>User Profile</h1>
       <div v-if="user">
         <img :src="user.Avatar" alt="User Avatar" />
@@ -90,6 +90,11 @@
   </script>
   
   <style scoped>
+  .profile {
+    background: linear-gradient(180deg, #76C5E7 0%, #FBF3F3 100%);
+    height: 100vh;
+
+  }
   /* Add styles for the posts grid and pagination */
   .posts-grid {
     display: grid;
