@@ -1,218 +1,226 @@
 <!-- components/Post.vue -->
-
 <template>
-    <div class="card">
-      <div class="card__header">
-        <NuxtLink :to="`/user/${user.id}`">
-            <div class="card__user">
+  <div class="card">
+    <div class="card__header">
+      <NuxtLink v-if="user" :to="`/user/${user.id}`">
+        <div class="card__user">
           <img
             class="card__avatar"
             :src="user.Avatar ? user.Avatar : '/assets/no_pfp.svg'"
             alt="Avatar"
           />
         </div>
-        </NuxtLink>
-        
-        <div class="card__info">
-          <div class="card__posted">
-            <h2 class="card__username">{{ user.name }}</h2>
-            <p class="card__date">{{ formattedPubDate }}</p>
-          </div>
-        
-          <div class="card__rating">
-            <font-awesome
-                v-for="star in Math.floor(post.likeCount / 4)"
-                :icon="['fas', 'star']"
-                :key="star"
-            />
+      </NuxtLink>
 
-            <font-awesome
-                v-if="post.likeCount % 4 >= 2"
-                :icon="['fas', 'star-half-stroke']"
-            />
+      <div class="card__info">
+        <div class="card__posted">
+          <h2 class="card__username">{{ user?.name || "Unknown User" }}</h2>
+          <p class="card__date">{{ formattedPubDate }}</p>
+        </div>
 
-            <font-awesome
-                v-for="star in (5 - Math.floor(post.likeCount / 4)) - (post.likeCount % 4 >= 2 ? 1 : 0)"
-                :icon="['far', 'star']"
-                :key="star + 'half'"
-            />
-            </div>
+        <div class="card__rating">
+          <font-awesome
+            v-for="star in Math.floor(post.likeCount / 4)"
+            :icon="['fas', 'star']"
+            :key="`full-${star}`"
+          />
 
+          <font-awesome
+            v-if="post.likeCount % 4 >= 2"
+            :icon="['fas', 'star-half-stroke']"
+          />
+
+          <font-awesome
+            v-for="star in (5 - Math.floor(post.likeCount / 4)) - (post.likeCount % 4 >= 2 ? 1 : 0)"
+            :icon="['far', 'star']"
+            :key="`empty-${star}`"
+          />
         </div>
       </div>
-      <p class="card__content">{{ post.Commentary }}</p>
-  
-      <div class="card__actions">
-        <button
-          class="card__like-button"
-          @click="toggleLike"
-          :style="{ color: post.isLiked ? '#007BFF' : '#cccccc' }"
-        >
-          <font-awesome 
-              :icon="['fas', 'thumbs-up']"
-          />
-          <i class="fa fa-thumbs-up"></i>
-          {{ post.likeCount }}
-        </button>
+    </div>
+    <p class="card__content">{{ post.Commentary }}</p>
 
-        <button
+    <div class="card__actions">
+      <button
+        class="card__like-button"
+        @click="toggleLike"
+        :style="{ color: post.isLiked ? '#007BFF' : '#cccccc' }"
+      >
+        <font-awesome :icon="['fas', 'thumbs-up']" />
+        {{ post.likeCount }}
+      </button>
+
+      <button
         v-if="isAuthor"
         class="card__delete-button"
         @click="deletePost"
-        >
+      >
         Delete
-        </button>
-      </div>
-
+      </button>
     </div>
-  </template>
-  
-  <script>
-  import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
-  import { useStore } from "../stores/useStore";
-  import { useUserStore } from '~/stores/userStore';  // Import user store
+  </div>
+</template>
 
-   
+<script>
+import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
+import { useStore } from "../stores/useStore";
+import { useUserStore } from "~/stores/userStore";
 
-  export default {
-    props: {
-      post: Object,
-    },
-    data() {
-      return {
-        user: null, // Store the user data for each post
-      };
-  },
-    computed: {
-      isAuthor() {
-        const userStore = useUserStore();
-        return String(userStore.user.id) === String(this.post.userId);
+export default {
+  props: {
+    post: {
+      type: Object,
+      required: true,
+      validator(value) {
+        return value?.userId && typeof value.userId === "string";
       },
-      formattedPubDate() {
-        const pubDate = new Date(this.post.PubDate);
-        const now = new Date();
-  
-        if (isToday(pubDate)) {
-          return `Today, ${format(pubDate, "HH:mm")}`;
-        } else if (isYesterday(pubDate)) {
-          return `Yesterday, ${format(pubDate, "HH:mm")}`;
-        } else if (now - pubDate < 7 * 24 * 60 * 60 * 1000) {
-          const daysAgo = formatDistanceToNow(pubDate, { addSuffix: true });
-          return `${daysAgo}, ${format(pubDate, "HH:mm")}`;
-        } else {
-          return `${format(pubDate, "dd.MM.yyyy")}`;
+    },
+  },
+  data() {
+    return {
+      user: null, // Store the user data for each post
+    };
+  },
+  computed: {
+    isAuthor() {
+      const userStore = useUserStore();
+      return String(userStore.user?.id) === String(this.post?.userId);
+    },
+    formattedPubDate() {
+      const pubDate = new Date(this.post.PubDate);
+      const now = new Date();
+
+      if (isToday(pubDate)) {
+        return `Today, ${format(pubDate, "HH:mm")}`;
+      } else if (isYesterday(pubDate)) {
+        return `Yesterday, ${format(pubDate, "HH:mm")}`;
+      } else if (now - pubDate < 7 * 24 * 60 * 60 * 1000) {
+        const daysAgo = formatDistanceToNow(pubDate, { addSuffix: true });
+        return `${daysAgo}, ${format(pubDate, "HH:mm")}`;
+      } else {
+        return format(pubDate, "dd.MM.yyyy");
+      }
+    },
+  },
+  methods: {
+    toggleLike() {
+      this.post.isLiked = !this.post.isLiked;
+      this.post.likeCount += this.post.isLiked ? 1 : -1;
+    },
+    fetchUser() {
+      const userStore = useStore();
+      const foundUser = userStore.getUserById(this.post.userId);
+      if (!foundUser) {
+        console.warn(`User with ID ${this.post.userId} not found.`);
+        this.user = { id: 0, name: "Unknown", Avatar: "/assets/no_pfp.svg" };
+      } else {
+        this.user = foundUser;
+      }
+    },
+    deletePost() {
+      console.log(`Post by user ${this.post.userId} deleted.`);
+      // Add logic for deleting the post
+    },
+  },
+  watch: {
+    post: {
+      immediate: true,
+      handler(newPost) {
+        if (newPost?.userId) {
+          this.fetchUser();
         }
       },
     },
-    methods: {
-      toggleLike() {
-        this.post.isLiked = !this.post.isLiked;
-        this.post.likeCount += this.post.isLiked ? 1 : -1;
-      },
-      // Fetch the user data based on userId
-      fetchUser() {
-        const userStore = useStore(); // Access the Pinia store
-        this.user = userStore.getUserById(this.post.userId); // Assuming you have a method to get user by ID
-      },
-    },
-    watch: {
-      post: {
-        immediate: true,
-        handler() {
-          this.fetchUser(); // Fetch the user data whenever the post changes
-        },
-    },
   },
-  };
-  </script>
-  
-  <style scoped>
-  .card {
-    background-color: #5bb9cd;
-    color: #ffffff;
-    border-radius: 10px;
-    padding: 24px;
-    width: 600px;
-    text-align: left;
-  }
-  
-  .card__header {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-  
-  .card__info {
-    width: 100%;
-  }
-  
-  .card__posted {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .card__content {
-    margin-bottom: 8px;
-  }
-  
-  .card__username {
-    font-size: 16px;
-  }
-  
-  .card__date {
-    font-size: 14px;
-  }
-  
-  .card__user {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    align-items: center;
-  }
-  
-  .card__avatar {
-    border-radius: 100%;
-    width: 56px;
-    height: 56px;
-  }
+};
+</script>
 
-  .card__actions {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .card__like-button {
-    background-color: #ffffff;
-    color: #ffffff;
-    padding: 4px 8px;
-  }
+<style scoped>
+.card {
+  background-color: #5bb9cd;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 24px;
+  width: 600px;
+  text-align: left;
+}
 
-  .card__delete-button {
-    text-transform: uppercase;
-    background-color: #EF2757;
-    border-radius: 8px;
-    color: #ffffff;
-    padding: px 12px;
-  }
-  
-  .card__rating {
-    display: flex;
-    flex-direction: row;
-    color: #ffd700;
-    gap: 2px;
-  }
-  
-  button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    color: #43ef27;
-  }
-  
-  button i {
-    margin-right: 5px;
-  }
-  </style>
-  
+.card__header {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.card__info {
+  width: 100%;
+}
+
+.card__posted {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card__content {
+  margin-bottom: 8px;
+}
+
+.card__username {
+  font-size: 16px;
+}
+
+.card__date {
+  font-size: 14px;
+}
+
+.card__user {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+}
+
+.card__avatar {
+  border-radius: 100%;
+  width: 56px;
+  height: 56px;
+}
+
+.card__actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card__like-button {
+  background-color: transparent;
+  color: #ffffff;
+  padding: 4px 8px;
+}
+
+.card__delete-button {
+  text-transform: uppercase;
+  background-color: #EF2757;
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 4px 12px;
+}
+
+.card__rating {
+  display: flex;
+  flex-direction: row;
+  color: #ffd700;
+  gap: 2px;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #43ef27;
+}
+
+button i {
+  margin-right: 5px;
+}
+</style>

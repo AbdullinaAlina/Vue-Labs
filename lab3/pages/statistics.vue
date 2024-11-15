@@ -15,9 +15,9 @@
     </div>
   </template>
   
-  <script setup>
+<script setup>
   import { ref } from 'vue';
-  import BarChart from './BarChart.vue'; // Add a bar chart component
+  import BarChart from '~/components/BarChart.vue';
   const userStore = useUserStore();
   const user = userStore.user;
   const startDate = ref('');
@@ -25,7 +25,9 @@
   const chartData = ref([]);
   
   import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '~/plugins/firebase';
+  import { db } from '~/plugins/firebase';
+  import { format } from "date-fns";
+
 
 const fetchStatistics = async () => {
   const q = query(
@@ -50,7 +52,7 @@ const fetchStatistics = async () => {
 
     // Check if postDate falls within the selected range
     if (postDate >= start && postDate <= end) {
-      const dateStr = post.PubDate;
+      const dateStr = format(new Date(post.PubDate), "d MMMM y");
       if (!data[dateStr]) data[dateStr] = 0;
       data[dateStr] += post.likeCount;
     }

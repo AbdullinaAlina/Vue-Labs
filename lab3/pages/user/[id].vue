@@ -1,14 +1,14 @@
 <template>
     <div>
       <h1>User Profile</h1>
-      <p>Viewing profile for user ID: {{ userId }}</p>
       <div v-if="user">
         <img :src="user.Avatar" alt="User Avatar" />
         <p>Name: {{ user.name }}</p>
         <p>Age: {{ user.age }}</p>
-        <p>address: {{ user.address }}</p>
-        <button @click="followUser">Follow</button>
-  
+        <p>Address: {{ user.address }}</p>
+        <button @click="followUser" v-if="isFollowShown">Follow</button>
+        <button @click="unfollowUser" v-else="isFollowShown">Unfollow</button>
+
         <h2>Latest Posts</h2>
         <div class="posts-grid">
           <Post 
@@ -45,6 +45,10 @@
 
   const route = useRoute();
   const userId = route.params.id;
+
+  const isFollowing = userStore.user.followingUsers.includes(String(userId));
+
+  const isFollowShown = (!isFollowing) && (userId != userStore.user.id);
   
   const user = computed(() => {
     return store.users.find(user => String(user.id) === String(userId)) || null;

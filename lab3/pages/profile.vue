@@ -7,7 +7,7 @@
     </div>
     <div class="profile-content" v-if="user.isAuth">
       <div class="profile-details">
-        <img :src="profilePicture" alt="Profile Picture" v-if="profilePicture" class="profile-pic" />
+        <img :src="user.avatar" alt="Profile Picture" class="profile-pic" />
         <div class="details">
           <p><strong>Username:</strong>
             <input v-model="updatedUser.username" :disabled="!isEditing" />
@@ -59,6 +59,9 @@
 
       <div class="followed-users">
         <router-link class="following-link" to="/following">Following</router-link>
+      </div>
+      <div class="followed-users">
+        <router-link class="following-link" to="/statistics">Statistics</router-link>
       </div>
     </div>
 
@@ -182,9 +185,7 @@ const toggleEdit = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: url('/assets/background.png');
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: linear-gradient(180deg, #76C5E7 0%, #FBF3F3 100%);
   height: 100vh;
 }
 

@@ -55,7 +55,9 @@ export const useStore = defineStore('main', {
                 }, { merge: true });
 
                 const userStore = useUserStore();
-                userStore.user.followingUsers.push(followedUserId);
+                if (!userStore.user.followingUsers.includes(followedUserId)){
+                    userStore.user.followingUsers.push(followedUserId);
+                }
             }
             catch (error) {
                 console.log("Error following user", error);

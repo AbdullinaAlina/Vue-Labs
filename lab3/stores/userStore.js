@@ -12,6 +12,7 @@ export const useUserStore = defineStore('user', () => {
         isAuth: false,
         id: '',
         username: '',
+        avatar: '',
         email: '',
         age: null,
         address: '',
@@ -25,10 +26,13 @@ export const useUserStore = defineStore('user', () => {
     user.value.isAuth = true;
     user.value.id = userData.id || '';
     user.value.username = userData.name || '';
+    user.value.avatar = userData.Avatar || '/assets/no_pfp.svg';
     user.value.email = userData.email || '';
     user.value.age = userData.age || null;
     user.value.address = userData.address || '';
     user.value.rating = userData.rating || 0;
+    user.value.followingUsers = userData.following || [];
+    user.value.followedUsers = userData.followers || [];
   };
 
   // Register a new user

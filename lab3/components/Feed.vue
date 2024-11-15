@@ -32,6 +32,7 @@
     <Post 
       v-for="post in paginatedPosts"
       :post="post" 
+      :key="post.id" 
     />
   </div>
 
