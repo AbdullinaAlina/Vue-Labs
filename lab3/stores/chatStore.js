@@ -1,6 +1,6 @@
 // stores/chatStore.js
 import { defineStore } from "pinia";
-import { collection, doc, addDoc, onSnapshot, query, where, orderBy } from "firebase/firestore";
+import { collection, doc, addDoc, onSnapshot, query, where, orderBy, getDocs } from "firebase/firestore";
 import { db } from "~/plugins/firebase";
 
 export const useChatStore = defineStore("chat", {
@@ -40,17 +40,25 @@ export const useChatStore = defineStore("chat", {
     },
 
     async createChat(participantIds) {
-      const chatsRef = collection(db, "chats");
-      const existingChat = this.chats.find((chat) =>
-        participantIds.every((id) => chat.participants.includes(id))
-      );
-
-      if (!existingChat) {
+        const chatsRef = collection(db, "chats");
+      
+        // Query for an existing chat where participants match
+        const q = query(chatsRef, where("participants", "array-contains", participantIds[0]));
+        const snapshot = await getDocs(q);
+      
+        // Check if the other participant is in the retrieved chats
+        const existingChat = snapshot.docs.find((doc) =>
+          doc.data().participants.includes(participantIds[1])
+        );
+      
+        if (existingChat) {
+          return existingChat.id; // Return the existing chat's ID
+        }
+      
+        // No existing chat found, create a new one
         const chatDoc = await addDoc(chatsRef, { participants: participantIds });
         return chatDoc.id;
       }
-
-      return existingChat.id;
-    },
+      
   },
 });

@@ -12,11 +12,8 @@
         </NuxtLink>
         <div>
             <button class="user__unfollow">Unfollow</button>
-                <button class="user__chat">Chat</button>
-                <NuxtLink to="/chats/1">
-                    Chat with user 2
-                </NuxtLink>
-            
+            <button class="user__chat" @click="handlechat">Chat</button>
+
 
         </div>
 
@@ -25,12 +22,32 @@
 
 <script setup>
 
+import { useChatStore } from '~/stores/chatStore';
+import { useUserStore } from '~/stores/userStore';
+import { useRouter } from 'vue-router';
+
+const chatStore = useChatStore();
+const userStore = useUserStore();
+const router = useRouter();
+
     const props = defineProps({
         user: {
             type: Object,
             required: true,
         }
     })
+
+    const handlechat = async () => {
+        const loggedInUserId = userStore.user.id;
+        const targetUserId = props.user.id;
+        try {
+            const chatId = await chatStore.createChat([loggedInUserId, targetUserId]);
+            await chatStore.loadMessages(chatId);
+            router.push(`/chats/${chatId}`);
+        } catch (error) {
+            console.error('Error opening chat:', error);
+        }
+    }
 </script>
 
 <style>

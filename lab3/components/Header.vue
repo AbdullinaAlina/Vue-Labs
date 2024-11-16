@@ -37,7 +37,6 @@
         this.toggleSideBar();
       },
       openProfile() {
-        // Implement profile functionality here
         console.log('Profile icon clicked!');
       },
     },
@@ -58,6 +57,5 @@
     font-size: 28px; /* Adjust size as needed */
   }
   
-  /* Include your existing sidebar styles here */
   </style>
   

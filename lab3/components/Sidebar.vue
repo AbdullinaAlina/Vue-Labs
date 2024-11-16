@@ -92,6 +92,7 @@
     position: relative;
     transition: width 1s ease-in;
     z-index: 1;
+    padding: 0 20px;
   }
   
   .sidebar__icon {

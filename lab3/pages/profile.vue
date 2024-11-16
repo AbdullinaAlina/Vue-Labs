@@ -1,6 +1,7 @@
 <template>
+      <Sidebar @categorySelected="updateSelectedCategory"/>
+
   <div class="profile-page">
-    <Statistics />
     <div class="header">
       <h2>User Profile</h2>
       <p v-if="user.isAuth">Welcome, {{ user.username }}!</p>
@@ -80,6 +81,7 @@ import { doc, deleteDoc } from 'firebase/firestore';
 
 import Post from '~/components/Post.vue';
 import Statistics from '~/components/statistics.vue';
+import Sidebar from '~/components/Sidebar.vue';
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
