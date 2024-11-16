@@ -45,7 +45,7 @@
   .message__content {
     max-width: 60%;
     background-color: #f4f4f4;
-    padding: 10px;
+    padding: 16px;
     border-radius: 12px;
   }
   .message__info {
