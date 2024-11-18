@@ -21,8 +21,7 @@ export const useUserStore = defineStore('user', () => {
         followedUsers: [], // Array to store followed users
   });
 
-  // Set user details after authentication
-  const setUserDetails = (userData) => {
+  function setUserDetails (userData) {
     user.value.isAuth = true;
     user.value.id = userData.id || '';
     user.value.username = userData.name || '';
@@ -36,7 +35,7 @@ export const useUserStore = defineStore('user', () => {
   };
 
   // Register a new user
-  const register = async (email, password, username, age, address, rating) => {
+  async function register (email, password, username, age, address, rating) {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userData = {
@@ -54,7 +53,7 @@ export const useUserStore = defineStore('user', () => {
   };
 
   // Login an existing user
-  const login = async (email, password) => {
+  async function login(email, password) {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log('User logged in:', userCredential.user);
@@ -73,7 +72,7 @@ export const useUserStore = defineStore('user', () => {
   };
 
   // Logout the user
-  const logout = async () => {
+  async function logout() {
     try {
       await signOut(auth);
       user.value = { isAuth: false, username: '', email: '', age: null, address: '', rating: 0, followedUsers: [] };
@@ -84,7 +83,7 @@ export const useUserStore = defineStore('user', () => {
   };
 
   // Update user details
-  const updateUserDetails = (updatedData) => {
+  function updateUserDetails (updatedData) {
     user.value.username = updatedData.username || user.value.username;
     user.value.email = updatedData.email || user.value.email;
     user.value.age = updatedData.age || user.value.age;
@@ -95,7 +94,7 @@ export const useUserStore = defineStore('user', () => {
   const followingUserData = ref([]); // Store the actual data of followed users
 
     // Fetch data for all followed users based on their IDs
-    const fetchFollowingUserData = async () => {
+    async function fetchFollowingUserData() {
         try {
             const followingData = [];
             for (const userId of user.value.followingUsers) {
@@ -113,16 +112,16 @@ export const useUserStore = defineStore('user', () => {
 
 
   // Follow a user
-  // const followUser = (userId) => {
-  //   if (!user.value.followedUsers.includes(userId)) {
-  //     user.value.followingUsers.push(userId);
-  //   }
-  // };
+  function followUser(userId) {
+    if (!user.value.followedUsers.includes(userId)) {
+      user.value.followingUsers.push(userId);
+    }
+  };
 
   // Unfollow a user
-  // const unfollowUser = (userId) => {
-  //   user.value.followingUsers = user.value.followingUsers.filter(id => id !== userId);
-  // };
+  function unfollowUser(userId) {
+    user.value.followingUsers = user.value.followingUsers.filter(id => id !== userId);
+  };
 
-  return { user, register, login, logout, updateUserDetails, fetchFollowingUserData, followingUserData};
+  return { user, register, login, logout, updateUserDetails, fetchFollowingUserData, followUser, unfollowUser, followingUserData};
 });

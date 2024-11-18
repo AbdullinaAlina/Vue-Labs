@@ -160,6 +160,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 8px;
 }
 
 .card__content {
@@ -193,9 +194,11 @@ export default {
 }
 
 .card__like-button {
-  background-color: transparent;
-  color: #ffffff;
-  padding: 4px 8px;
+  background-color: #ffffff;
+  color: #F4E285;
+  padding: 4px 16px;
+  border-radius: 100px;
+
 }
 
 .card__delete-button {
@@ -209,7 +212,7 @@ export default {
 .card__rating {
   display: flex;
   flex-direction: row;
-  color: #ffd700;
+  color: #F4E285;
   gap: 2px;
 }
 

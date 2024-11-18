@@ -1,5 +1,5 @@
 <template>
-    <div class="user">
+    <div class="user" v-if="user">
         <NuxtLink :to="`/user/${user.id}`">
           <img
             class="user__avatar"
@@ -34,6 +34,8 @@ const router = useRouter();
         user: {
             type: Object,
             required: true,
+            default: () => ({ id: '', name: '', Avatar: '', followers: [] }),
+
         }
     })
 
@@ -48,9 +50,15 @@ const router = useRouter();
             console.error('Error opening chat:', error);
         }
     }
+
+    // const handlechat = async() => {
+    //     const chatId = await chatStore.handlechat(props.user.id);
+    //     router.push(`/chats/${chatId}`);
+
+    // }
 </script>
 
-<style>
+<style scoped>
  .user {
     display: flex;
     flex-direction: row;

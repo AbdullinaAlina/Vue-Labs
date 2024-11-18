@@ -1,10 +1,10 @@
 <template>
     <div class="auth-overlay" v-if="isOpen" @click.self="closeOverlay">
       <div class="overlay__content">
-        <h2 class="overlay__title">Authentication</h2>
+        <h2 class="overlay__title">Get started</h2>
         <div class="overlay__buttons" v-if="!user.isAuth">
-          <button class="auth-button" @click="showLoginOverlay">Login</button>
-          <button class="auth-button" @click="redirectToRegister">Register</button>
+          <button class="auth-button login" @click="showLoginOverlay">Login</button>
+          <button class="auth-button sign-up" @click="redirectToRegister">Sign up</button>
         </div>
         <div v-else>
           <h3 class="welcome-message">Welcome, {{ user.username }}!</h3>
@@ -84,7 +84,6 @@
     closeOverlay();
   };
   
-  // Create a computed property to access user data
   const user = computed(() => userStore.user);
   </script>
   
@@ -116,29 +115,39 @@
     margin-bottom: 20px;
     font-size: 24px;
     font-weight: bold;
-    color: #333;
+    color: #28536B;
   }
   
   .overlay__buttons {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    gap: 16px;
     margin-bottom: 20px;
   }
   
   .auth-button {
-    background-color: #5bb9cd;
-    color: white;
-    border: none;
     border-radius: 5px;
     padding: 10px 15px;
     cursor: pointer;
     transition: background-color 0.3s;
   }
-  
-  .auth-button:hover {
+
+  .login {
     background-color: #5bb9cd;
+    border: none;
+    color: white;
   }
   
+  .login:hover {
+    background-color: #28536B;
+  }
+
+  .sign-up {
+    background-color: #ffffff;
+    border: 1px solid #5bb9cd;
+    color: #5bb9cd;
+  }
+
   .welcome-message {
     font-size: 18px;
     margin: 10px 0;

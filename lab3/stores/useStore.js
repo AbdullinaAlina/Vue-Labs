@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import { db } from "@/plugins/firebase";
-import { collection, doc, addDoc, onSnapshot, updateDoc, arrayUnion } from "firebase/firestore";
+import { collection, doc, addDoc, onSnapshot, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { useUserStore } from './userStore';
 
 export const useStore = defineStore('main', {
@@ -62,7 +62,29 @@ export const useStore = defineStore('main', {
             catch (error) {
                 console.log("Error following user", error);
             }
+        },
+        async unfollowUser(currentUserId, followedUserId) {
+          try {
+            const currentUserDocRef = doc(db, 'users', String(currentUserId));
+            const followedUserDocRef = doc(db, 'users', String(followedUserId));
 
+            await updateDoc(currentUserDocRef, {
+                following: arrayRemove(String(followedUserId))
+            });
+
+            await updateDoc(followedUserDocRef, {
+                followers: arrayRemove(String(currentUserId))
+            });
+
+            const userStore = useUserStore();
+            const index = userStore.user.followingUsers.indexOf(followedUserId);
+            if (index !== 1) {
+              userStore.user.followingUsers.splice(index, 1);
+            }
+        }
+        catch (error) {
+            console.log("Error unfollowing user", error);
+        }
         }
     }
 });

@@ -4,7 +4,13 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@vesp/nuxt-fontawesome',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    ['@nuxtjs/google-fonts', {
+      families: {
+        Roboto: true,
+      }
+    }]
+    
   ],
   fontawesome: {
     icons: {
@@ -13,4 +19,5 @@ export default defineNuxtConfig({
     }
   },
   plugins: [{ src: '~/plugins/firebase.js', mode: 'client' }],
+
 })
