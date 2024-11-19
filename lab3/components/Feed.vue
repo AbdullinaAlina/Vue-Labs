@@ -174,11 +174,13 @@ font-size: 16px;
 .posts-grid {
 display: grid;
 grid-template-columns: repeat(2, 1fr);
-gap: 24px; /* Adjust the gap between cards as needed */
+gap: 24px; 
 margin-bottom: 24px;
 justify-content: center;
 padding: 30px;
-background-color: rgb(255, 255, 255, 0.3);
+background-color: rgb(255, 255, 255, 0.7);
+border-radius: 8px;
+width: 80%;
 }
 
 /* Specifically place each post in the correct position */

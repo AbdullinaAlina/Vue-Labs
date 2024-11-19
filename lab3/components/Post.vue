@@ -141,7 +141,6 @@ export default {
   color: #ffffff;
   border-radius: 10px;
   padding: 24px;
-  width: 600px;
   text-align: left;
 }
 

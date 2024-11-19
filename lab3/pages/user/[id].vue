@@ -1,6 +1,7 @@
 <template>
+  <Sidebar />
   <div class="user">
-    <div v-if="user">
+    <div v-if="user" class="user__container">
       <div class="user__profile">
         <img :src="user.Avatar" alt="User Avatar" class="user__avatar" />
         <div class="user__info">
@@ -15,11 +16,10 @@
               <button @click="chatUser" class="user__message">Message</button>
             </div>
             
-          </div> <!-- Properly close the header div -->
+          </div> 
           <div class="user__statistic">
             <p>{{ user.followers.length }} followers</p>
             <p>{{ user.following.length }} following</p>
-
           </div>
           <div class="user__bio">
             <p>Age: {{ user.age }}</p>
@@ -42,16 +42,16 @@
           <button @click="prevPage" :disabled="currentPage === 1">
             <font-awesome :icon="['fas', 'chevron-left']" />
           </button>
-          <span> {{ currentPage }} / {{ totalPages }}</span>
+          <span class="pagination__page"> {{ currentPage }} / {{ totalPages }}</span>
           <button @click="nextPage" :disabled="currentPage === totalPages">
             <font-awesome :icon="['fas', 'chevron-right']" />
           </button>
         </div>
       </div>
     </div>
+  <p v-else>User not found.</p>
+</div>
 
-    <p v-else>User not found.</p>
-  </div>
 </template>
 
   <script setup>
@@ -61,7 +61,9 @@
 
   import { computed, ref } from 'vue';
   import Post from '~/components/Post.vue';
-  
+  import Sidebar from '~/components/Sidebar.vue';
+
+
   const store = useStore();
   const userStore = useUserStore();
 
@@ -121,91 +123,140 @@
   </script>
   
   <style scoped>
-  .user {
-    background-color: #ffffff;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.user {
+  background-image: url(/assets/background.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
 
-  .user__profile {
-    display: flex;
-  flex-direction: row;}
+.user__container {
+  width: 80%;
+  background-color: #ffffff;
+  max-width: 1200px;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
 
-  .user__header {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-  }
+.user__profile {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
 
-  .user__info {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  .user__name{
-    display: flex;
-    align-items: center;
-  }
+.user__avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
-  .user__actions {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-  }
+.user__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-  .user__statistic {
-    display: flex;
-    flex-direction: row;
-    gap: 24px;
-  }
-  
-  .user__follow {
-    background-color: #5bb9cd;
-    border: none;
-    border-radius: 8px;
-    color: #ffffff;
-    padding: 8px 16px;
-  }
+.user__header {
+  display: flex;
+  align-items: center;
+}
 
-  .user__unfollow {
-    background-color: #ffffff;
-    border: 1px solid #5bb9cd;
-    border-radius: 8px;
-    color: #5bb9cd;
-    padding: 8px 16px;
-  }
+.user__name {
+  margin-right: 20px;
+}
 
-  .user__message {
-    background-color: #efefef;
-    border: none;
-    border-radius: 8px;
-    color: #000000;
-    padding: 8px 16px;
-  }
+.user__name h3 {
+  font-size: 1.8rem;
+  margin: 0;
+}
 
-  .user__avatar {
-    width: 150px;
-  }
-  .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px; /* Adjust the gap between cards as needed */
-    margin-bottom: 24px;
-    justify-content: center;
-  }
-  
-  .pagination {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-  }
-  
-  .pagination button {
-    padding: 8px;
-  }
-  </style>
-  
+.user__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.user__follow,
+.user__unfollow,
+.user__message {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.user__follow {
+  background-color: #5bb9cd;
+  color: #ffffff;
+  border: none;
+}
+
+.user__unfollow {
+  background-color: #ffffff;
+  color: #5bb9cd;
+  border: 1px solid #5bb9cd;
+}
+
+.user__message {
+  background-color: #efefef;
+  color: #000000;
+  border: none;
+}
+
+.user__statistic {
+  display: flex;
+  gap: 24px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.user__bio p {
+  margin: 0;
+}
+
+.user__posts {
+  width: 100%;
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.pagination__page {
+  display: flex;
+  align-items: center;
+}
+.pagination button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #efefef;
+  color: #000000;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+</style>
