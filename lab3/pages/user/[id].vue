@@ -1,5 +1,5 @@
 <template>
-  <Sidebar />
+  <Sidebar @categorySelected="updateSelectedCategory"/>
   <div class="user">
     <div v-if="user" class="user__container">
       <div class="user__profile">
@@ -130,11 +130,11 @@
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
   padding: 16px;
 }
 
 .user__container {
+  height: fit-content;
   width: 80%;
   background-color: #ffffff;
   max-width: 1200px;

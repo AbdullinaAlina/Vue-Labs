@@ -1,52 +1,39 @@
 <template>
   <Sidebar @categorySelected="updateSelectedCategory" />
-  <div class="profile-page">
-    <div class="profile-container">
-      <div class="profile-header">
-        <img :src="user.avatar" alt="Profile Picture" class="profile-avatar" />
-        <div class="profile-info">
-          <h2>{{ user.username }}</h2>
-          <div class="profile-details">
-            <div class="profile-item">
-              <label v-if="isEditing">Username:</label>
-              <div v-else>Username: {{ user.username }}</div>
-              <input v-if="isEditing" v-model="updatedUser.username" />
+  <div class="profile">
+    <div v-if="user" class="profile__container">
+      <div class="user__profile">
+        <img :src="user.avatar" alt="Profile Avatar" class="profile__avatar" />
+        <div class="profile__info">
+          <div class="profile__header">
+            <div class="profile__name">
+              <h3>{{ user.username }}</h3>
             </div>
-            <div class="profile-item">
-              <label v-if="isEditing">Email:</label>
-              <div v-else>Email: {{ user.email }}</div>
-              <input v-if="isEditing" v-model="updatedUser.email" type="email" />
-            </div>
-            <div class="profile-item">
-              <label v-if="isEditing">Age:</label>
-              <div v-else>Age: {{ user.age }}</div>
-              <input v-if="isEditing" v-model="updatedUser.age" type="number" />
-            </div>
-            <div class="profile-item">
-              <label v-if="isEditing">Address:</label>
-              <div v-else>Address: {{ user.address }}</div>
-              <input v-if="isEditing" v-model="updatedUser.address" />
-            </div>
-            <div class="profile-item">
-              <label v-if="isEditing">Rating:</label>
-              <div v-else>Rating: {{ user.rating }}</div>
-              <input v-if="isEditing" v-model="updatedUser.rating" type="number" />
+            <div class="profile__actions">
+              <button @click="toggleEdit" v-if="!isEditing" class="profile__edit">Edit Profile</button>
+              <button @click="handleUpdate" v-if="isEditing" class="profile__save">Save</button>
+              <button @click="goToStatistics" class="profile__stats">Statistics</button>
             </div>
           </div>
-          <div class="profile-actions">
-            <button @click="toggleEdit">{{ isEditing ? "Cancel" : "Edit Profile" }}</button>
-            <button v-if="isEditing" @click="handleUpdate">Save</button>
+          <div class="profile__statistic">
+            <p>{{ user.followedUsers.length }} followers</p>
+            <p>{{ user.followingUsers.length }} following</p>
+          </div>
+          <div class="user__bio">
+            <p>Age: {{ user.age }}</p>
+            <p>Address: {{ user.address }}</p>
           </div>
         </div>
       </div>
-      <div class="user-posts">
-        <h3>My Posts</h3>
+
+      <div class="user__posts">
+        <h2>Latest Posts</h2>
         <div class="posts-grid">
-          <Post 
-            v-for="post in paginatedPosts" 
-            :key="post.id" 
-            :post="post" 
-            @delete-post="deletePost" 
+          <Post
+            v-for="post in paginatedPosts"
+            :key="post.id"
+            :post="post"
+            :profile="profile"
           />
         </div>
         <div class="pagination">
@@ -59,11 +46,8 @@
           </button>
         </div>
       </div>
-      <div class="profile-navigation">
-        <router-link to="/following">Following</router-link>
-        <router-link to="/statistics">Statistics</router-link>
-      </div>
     </div>
+    <p v-else>Profile not found.</p>
   </div>
 </template>
 
@@ -159,75 +143,140 @@ const nextPage = () => {
 </script>
 
 <style scoped>
-.profile-page {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
+.profile {
   align-items: center;
   background-image: url(/assets/background.png);
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 100vh;
-}
-
-.profile-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-}
-
-.profile-header {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.user__profile {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.profile__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.profile__edit {
+  background-color: #5bb9cd;
+  color: #ffffff;
+  border: none;
+}
+
+.profile__statistic {
+  display: flex;
+  gap: 24px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.user__edit,
+.user__save,
+.user__stats {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.profile__avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile__container {
+  height: fit-content;
+  width: 80%;
+  background-color: #ffffff;
+  max-width: 1200px;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.profile__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile__header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.profile__name h3 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.profile__stats {
+  background-color: #efefef;
+  color: #000000;
+  border: none;
 }
 
 .profile-avatar {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .profile-info {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .profile-details {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .profile-item {
+  flex: 1 1 calc(50% - 16px);
   display: flex;
   flex-direction: column;
-}
-
-.profile-item label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.profile-item div {
-  margin-bottom: 10px;
-}
-
-.profile-item input {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  color: #666;
 }
 
 .profile-actions {
-  margin-top: 10px;
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .user-posts {
-  margin-top: 30px;
+  width: 100%;
 }
+
 .posts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -246,6 +295,7 @@ const nextPage = () => {
   display: flex;
   align-items: center;
 }
+
 .pagination button {
   padding: 8px 12px;
   border: none;
@@ -258,5 +308,18 @@ const nextPage = () => {
 .pagination button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.profile-navigation {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.profile-navigation a {
+  text-decoration: none;
+  color: #5bb9cd;
+  font-weight: bold;
 }
 </style>
