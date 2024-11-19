@@ -18,7 +18,7 @@ export const useUserStore = defineStore('user', () => {
         address: '',
         rating: 0,
         followingUsers: [],
-        followedUsers: [], // Array to store followed users
+        followerUsers: [], // Array to store followed users
   });
 
   function setUserDetails (userData) {
@@ -31,7 +31,7 @@ export const useUserStore = defineStore('user', () => {
     user.value.address = userData.address || '';
     user.value.rating = userData.rating || 0;
     user.value.followingUsers = userData.following || [];
-    user.value.followedUsers = userData.followers || [];
+    user.value.followerUsers = userData.followers || [];
   };
 
   // Register a new user
@@ -75,7 +75,7 @@ export const useUserStore = defineStore('user', () => {
   async function logout() {
     try {
       await signOut(auth);
-      user.value = { isAuth: false, username: '', email: '', age: null, address: '', rating: 0, followedUsers: [] };
+      user.value = { isAuth: false, username: '', email: '', age: null, address: '', rating: 0, followedUsers: [], followerUsers: [] };
       console.log('User logged out');
     } catch (error) {
       console.error('Logout error:', error);
@@ -91,7 +91,8 @@ export const useUserStore = defineStore('user', () => {
     user.value.rating = updatedData.rating || user.value.rating;
   };
 
-  const followingUserData = ref([]); // Store the actual data of followed users
+  const followingUserData = ref([]);
+  const followerUserData = ref([]); 
 
     // Fetch data for all followed users based on their IDs
     async function fetchFollowingUserData() {
@@ -110,18 +111,44 @@ export const useUserStore = defineStore('user', () => {
         }
     };
 
+    async function fetchFollowerUserData() {
+      try {
+        console.log('Fetching follower users:', user.value.followerUsers); // Add this log
+        const followerData = [];
+        for (const userId of user.value.followerUsers) {
+          const userDocRef = doc(db, 'users', userId);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            followerData.push({ id: userDoc.id, ...userDoc.data() });
+          }
+        }
+        console.log('Fetched followers:', followerData); // Add this log
+        followerUserData.value = followerData;
+      } catch (error) {
+        console.error('Error fetching follower users:', error);
+      }
+    }
+    
+
 
   // Follow a user
   function followUser(userId) {
     if (!user.value.followedUsers.includes(userId)) {
       user.value.followingUsers.push(userId);
+      fetchFollowingUserData();
     }
   };
 
   // Unfollow a user
   function unfollowUser(userId) {
     user.value.followingUsers = user.value.followingUsers.filter(id => id !== userId);
+    fetchFollowingUserData();
   };
 
-  return { user, register, login, logout, updateUserDetails, fetchFollowingUserData, followUser, unfollowUser, followingUserData};
+  function removeFollower(userId) {
+    user.value.followerUsers = user.value.followerUsers.filter(id => id !== userId);
+    fetchFollowerUserData();
+  };
+
+  return { user, register, login, logout, updateUserDetails, fetchFollowingUserData, fetchFollowerUserData, followUser, unfollowUser, followingUserData, followerUserData, removeFollower};
 });

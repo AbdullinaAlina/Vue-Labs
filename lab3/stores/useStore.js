@@ -85,6 +85,29 @@ export const useStore = defineStore('main', {
         catch (error) {
             console.log("Error unfollowing user", error);
         }
-        }
+      },
+      async removeFollower(currentUserId, followerUserId) {
+        try {
+          const currentUserDocRef = doc(db, 'users', String(currentUserId));
+          const followerUserDocRef = doc(db, 'users', String(followerUserId));
+
+          await updateDoc(currentUserDocRef, {
+              followers: arrayRemove(String(followerUserId))
+          });
+
+          await updateDoc(followerUserDocRef, {
+              following: arrayRemove(String(currentUserId))
+          });
+
+          const userStore = useUserStore();
+          const index = userStore.user.followerUsers.indexOf(followerUserId);
+          if (index !== 1) {
+            userStore.user.followerUsers.splice(index, 1);
+          }
+      }
+      catch (error) {
+          console.log("Error removing follower", error);
+      }
+      }
     }
 });

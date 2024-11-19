@@ -1,10 +1,10 @@
 <template>
     <Sidebar @categorySelected="updateSelectedCategory" />
     <div class="following-page">
-      <h1 class="page-title">Following</h1>
+      <h1 class="page-title">Followers</h1>
       <div class="following-list">
-        <FollowingUser
-          v-for="user in store.followingUserData"
+        <FollowerUser
+          v-for="user in userStore.followerUserData"
           :key="user.id"
           :user="user" 
         />
@@ -14,15 +14,15 @@
   
   <script setup>
   import { useUserStore } from '~/stores/userStore';
-  import FollowingUser from '~/components/FollowingUser.vue';
+  import FollowerUser from '~/components/FollowerUser.vue';
   import { onMounted } from 'vue';
   
-  const store = useUserStore();
+  const userStore = useUserStore();
   
   onMounted(() => {
-    store.fetchFollowingUserData();
+    userStore.fetchFollowerUserData();
   });
-  
+
   </script>
   
   <style scoped>

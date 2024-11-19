@@ -6,12 +6,11 @@
   
   <script setup>
   import { computed } from 'vue';
-  import { Bar } from 'vue-chartjs';
+  import { Bar, Chart } from 'vue-chartjs';
   import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
   
   ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
   
-  // Access props directly in <script setup>
   const props = defineProps({
     data: {
       type: Array,
@@ -24,7 +23,7 @@
     datasets: [
       {
         label: 'Likes',
-        backgroundColor: '#42A5F5',
+        backgroundColor: '#5bb9cd',
         data: props.data.map((entry) => entry.y),
       },
     ],

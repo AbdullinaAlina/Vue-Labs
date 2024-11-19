@@ -14,7 +14,7 @@
         </div>
       
       <div class="user__actions">
-        <button class="user__unfollow" @click="unfollowUser">Unfollow</button>
+        <button class="user__unfollow" @click="removeFollower">Remove</button>
         <button class="user__chat" @click="handleChat">Chat</button>
       </div>
     </div>
@@ -40,7 +40,7 @@
     }
   });
   
-  const unfollowUser = () => {
+  const removeFollower = () => {
     console.log(props.user); 
     const userId = props.user.id;
     
@@ -48,8 +48,8 @@
     console.error('User ID is not defined');
   }
     console.log(userId);
-    userStore.unfollowUser(String(userId));
-    store.unfollowUser(String(userStore.user.id), String(userId)); 
+    userStore.removeFollower(String(userId));
+    store.removeFollower(String(userStore.user.id), String(userId)); 
   }
   
 ;

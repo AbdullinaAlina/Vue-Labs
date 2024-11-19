@@ -12,16 +12,53 @@
             <div class="profile__actions">
               <button @click="toggleEdit" v-if="!isEditing" class="profile__edit">Edit Profile</button>
               <button @click="handleUpdate" v-if="isEditing" class="profile__save">Save</button>
-              <button @click="goToStatistics" class="profile__stats">Statistics</button>
+              <button @click="toggleEdit" v-if="isEditing" class="profile__cancel">Cancel</button>
+
+              <NuxtLink to="/statistics">
+               <button @click="goToStatistics" class="profile__stats">Statistics</button> 
+              </NuxtLink>
+              
             </div>
           </div>
           <div class="profile__statistic">
-            <p>{{ user.followedUsers.length }} followers</p>
-            <p>{{ user.followingUsers.length }} following</p>
+            <NuxtLink to="/followers">
+              <p>{{ user.followerUsers.length }} followers</p>
+            </NuxtLink>
+            <NuxtLink to="/following">
+              <p>{{ user.followingUsers.length }} following</p>
+            </NuxtLink>
+            
           </div>
-          <div class="user__bio">
-            <p>Age: {{ user.age }}</p>
-            <p>Address: {{ user.address }}</p>
+          <div class="profile__bio">
+            <div class="profile__age">
+              <label>Age:</label>
+              <template v-if="isEditing">
+                <input
+                  v-model="updatedUser.age"
+                  type="number"
+                  min="0"
+                  class="editable-input"
+                  placeholder="Enter age"
+                />
+              </template>
+              <template v-else>
+                <p>{{ user.age }}</p>
+              </template>
+            </div>
+            <div class="profile__address">
+              <label>Address:</label>
+              <template v-if="isEditing">
+                <input
+                  v-model="updatedUser.address"
+                  type="text"
+                  class="editable-input"
+                  placeholder="Enter address"
+                />
+              </template>
+              <template v-else>
+                <p>{{ user.address }}</p>
+              </template>
+            </div>
           </div>
         </div>
       </div>
@@ -140,6 +177,7 @@ const nextPage = () => {
     currentPage.value++;
   }
 };
+
 </script>
 
 <style scoped>
@@ -165,10 +203,17 @@ const nextPage = () => {
   gap: 12px;
 }
 
-.profile__edit {
+.profile__edit,
+.profile__save {
   background-color: #5bb9cd;
   color: #ffffff;
   border: none;
+}
+
+.profile__cancel {
+  background-color: #ffffff;
+  color: #5bb9cd;
+  border: 1px solid #5bb9cd;
 }
 
 .profile__statistic {
@@ -239,11 +284,11 @@ const nextPage = () => {
   object-fit: cover;
 }
 
-.profile-info {
-  flex: 1;
+.profile__age,
+.profile__address {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  flex-direction: row;
+  gap: 8px;
 }
 
 .profile-details {
