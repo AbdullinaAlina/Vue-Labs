@@ -22,7 +22,7 @@
     labels: props.data.map((entry) => entry.x),
     datasets: [
       {
-        label: 'Likes',
+        label: 'Number of Posts',
         backgroundColor: '#5bb9cd',
         data: props.data.map((entry) => entry.y),
       },
@@ -37,7 +37,7 @@
         title: { display: true, text: 'Date' },
       },
       y: {
-        title: { display: true, text: 'Total Likes' },
+        title: { display: true, text: 'Total Posts' },
         beginAtZero: true,
       },
     },

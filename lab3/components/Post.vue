@@ -45,6 +45,7 @@
         class="card__like-button"
         @click="toggleLike"
         :style="{ color: post.isLiked ? '#007BFF' : '#cccccc' }"
+        :disabled="isAuthor"
       >
         <font-awesome :icon="['fas', 'thumbs-up']" />
         {{ post.likeCount }}

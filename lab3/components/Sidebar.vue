@@ -12,7 +12,6 @@
         <button class="sidebar__button" @click="toggleSideBar">
           Menu
         </button>
-  
         <ul class="sidebar__categories">
           <li
             v-for="(category, index) in categories"
@@ -29,10 +28,9 @@
         <font-awesome :icon="['fas', 'user']" />
       </div>
   
-      <!-- Authentication Overlay -->
       <AuthOverlay
         :isOpen="isOverlayOpen"
-        @close="closeOverlay"
+        @close="closeAuthOverlay"
         class="sidebar__auth-overlay"
         />
     </div>
@@ -69,7 +67,7 @@
     isOverlayOpen.value = !isOverlayOpen.value;
   };
   
-  const closeOverlay = () => {
+  const closeAuthOverlay = () => {
     isOverlayOpen.value = false;
   };
   
@@ -130,19 +128,7 @@
     position: relative;
   }
 
-  .sidebar__auth-overlay {
-    position: absolute;
-    top: 51px; 
-    right: 20px; 
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 4px, rgba(0, 0, 0, 0.15) 0px 2px 8px;
-    border-radius: 8px;
-    padding: 16px;
-    z-index: 1000;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    width: 264px;
-
-}
+  
 
   
   .sidebar__categories li:hover {

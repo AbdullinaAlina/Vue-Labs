@@ -18,7 +18,7 @@
 
       <!-- Bar Chart -->
       <div v-if="chartData.length" class="chart-container">
-        <h3>Likes per Day</h3>
+        <h3>Posts per Day</h3>
         <BarChart :data="chartData" />
       </div>
 
@@ -56,14 +56,15 @@ const fetchStatistics = async () => {
     const postDate = new Date(post.PubDate);
 
     if (postDate >= start && postDate <= end) {
-      const dateStr = format(postDate, 'd MMMM y');
+      const dateStr = format(postDate, 'd MMMM y'); // Group posts by formatted date
       if (!data[dateStr]) data[dateStr] = 0;
-      data[dateStr] += post.likeCount;
+      data[dateStr] += 1; // Increment the count for posts published on this date
     }
   });
 
   chartData.value = Object.keys(data).map((date) => ({ x: date, y: data[date] }));
 };
+
 </script>
 
 <style scoped>

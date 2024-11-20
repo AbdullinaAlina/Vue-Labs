@@ -7,7 +7,17 @@
         <div class="profile__info">
           <div class="profile__header">
             <div class="profile__name">
-              <h3>{{ user.username }}</h3>
+              <template v-if="isEditing">
+                <input
+                  v-model="updatedUser.username"
+                  type="texr"
+                  class="editable-input"
+                  placeholder="Enter username"
+                />
+              </template>
+              <template v-else>
+                <h3>{{ user.username }}</h3>
+              </template>
             </div>
             <div class="profile__actions">
               <button @click="toggleEdit" v-if="!isEditing" class="profile__edit">Edit Profile</button>
