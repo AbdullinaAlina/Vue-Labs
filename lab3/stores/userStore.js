@@ -129,20 +129,22 @@ export const useUserStore = defineStore('user', () => {
       }
     }
     
-
-
   // Follow a user
-  function followUser(userId) {
-    if (!user.value.followedUsers.includes(userId)) {
+  async function followUser(userId) {
+    if (!user.value.followingUsers.includes(userId)) {
       user.value.followingUsers.push(userId);
-      fetchFollowingUserData();
+      const store = useStore();
+      await store.followUser(user.value.id, userId);
+      await fetchFollowingUserData();
     }
   };
 
   // Unfollow a user
-  function unfollowUser(userId) {
+  async function unfollowUser(userId) {
     user.value.followingUsers = user.value.followingUsers.filter(id => id !== userId);
-    fetchFollowingUserData();
+    const store = useStore();
+    await store.unfollowUser(user.value.id, userId);
+    await fetchFollowingUserData();
   };
 
   function removeFollower(userId) {

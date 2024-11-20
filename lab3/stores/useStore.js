@@ -1,3 +1,4 @@
+// useStore
 import {defineStore} from 'pinia';
 import { db } from "@/plugins/firebase";
 import { collection, doc, addDoc, onSnapshot, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
@@ -39,6 +40,7 @@ export const useStore = defineStore('main', {
           }
         },
         getUserById(userId) {
+          console.log(this.users);
             return this.users.find(user => String(user.id) === String(userId));
         },
         async followUser(currentUserId, followedUserId) {
@@ -54,10 +56,7 @@ export const useStore = defineStore('main', {
                     followers: arrayUnion(String(currentUserId))
                 }, { merge: true });
 
-                const userStore = useUserStore();
-                if (!userStore.user.followingUsers.includes(followedUserId)){
-                    userStore.user.followingUsers.push(followedUserId);
-                }
+                
             }
             catch (error) {
                 console.log("Error following user", error);
@@ -76,11 +75,7 @@ export const useStore = defineStore('main', {
                 followers: arrayRemove(String(currentUserId))
             });
 
-            const userStore = useUserStore();
-            const index = userStore.user.followingUsers.indexOf(followedUserId);
-            if (index !== 1) {
-              userStore.user.followingUsers.splice(index, 1);
-            }
+            
         }
         catch (error) {
             console.log("Error unfollowing user", error);
@@ -107,7 +102,46 @@ export const useStore = defineStore('main', {
       }
       catch (error) {
           console.log("Error removing follower", error);
+        }
+      },
+      async fetchFollowingUserData(userId) {
+        
+        try {
+            const followingData = [];
+            const user = getUserById(userId);
+            console.log(user);
+            for (const followingUserId of user.value.followingUsers) {
+                const userDocRef = doc(db, 'users', followingUserId);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    followingData.push({ id: userDoc.id, ...userDoc.data() });
+                }
+            }
+            followingUserData.value = followingData;
+        } catch (error) {
+            console.error('Error fetching followed users:', error);
+        }
+    },
+
+    async fetchFollowerUserData(userId) {
+      try {
+        console.log(userId);
+        const user = this.getUserById(userId);
+        console.log(user);
+        console.log('Fetching follower users:', user.value.followerUsers); // Add this log
+        const followerData = [];
+        for (const followerUserId of user.value.followerUsers) {
+          const userDocRef = doc(db, 'users', followerUserId);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            followerData.push({ id: userDoc.id, ...userDoc.data() });
+          }
+        }
+        console.log('Fetched followers:', followerData); // Add this log
+        followerUserData.value = followerData;
+      } catch (error) {
+        console.error('Error fetching follower users:', error);
       }
-      }
+    }
     }
 });

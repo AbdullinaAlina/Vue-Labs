@@ -18,7 +18,10 @@
             
           </div> 
           <div class="user__statistic">
-            <p>{{ user.followers.length }} followers</p>
+            <NuxtLink :to="`/user/${user.id}/followers`">
+              <p>{{ user.followers.length }} followers</p>
+            </NuxtLink>
+            
             <p>{{ user.following.length }} following</p>
           </div>
           <div class="user__bio">
@@ -112,12 +115,10 @@
 
   const followUser = () => {
     userStore.followUser(String(userId));
-    store.followUser(String(userStore.user.id), String(userId)); // Assuming user.id is the user's ID
   };
  
   const unfollowUser = () => {
     userStore.unfollowUser(String(userId));
-    store.unfollowUser(String(userStore.user.id), String(userId)); 
   };
 
   </script>
