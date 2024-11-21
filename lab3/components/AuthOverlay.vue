@@ -93,12 +93,9 @@ const user = computed(() => userStore.user);
 <style scoped>
   .auth-overlay {
     position: absolute;
-    top: 51px; 
-    right: 20px; 
-    background-color: rgba(0, 0, 0, 0.6);;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 4px, rgba(0, 0, 0, 0.15) 0px 2px 8px;
-    border-radius: 8px;
-    padding: 16px;
+    top: 0px; 
+    right: 0px; 
+    
     z-index: 1000;
     display: flex;
     justify-content: flex-end;
@@ -111,9 +108,15 @@ const user = computed(() => userStore.user);
   .overlay__content {
     background: white;
     border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 4px, rgba(0, 0, 0, 0.15) 0px 2px 8px;
     width: 264px;
     text-align: center;
+    position: absolute;
+    padding: 20px;
+    right: 20px;
+    top: 51px;
   }
+
   
   .overlay__title {
     margin-bottom: 20px;

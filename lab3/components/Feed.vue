@@ -150,8 +150,7 @@ flex-direction: row;
 justify-content: space-between;
 align-items: center;
 margin-bottom: 12px;
-width: 100%;
-padding: 4px 80px;
+width: 80%;
 color: #fff
 }
 .filters {

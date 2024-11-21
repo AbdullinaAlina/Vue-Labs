@@ -142,7 +142,7 @@
   }
   
   .forgot-password {
-    color: blue;
+    color: #5bb9cd;
     cursor: pointer;
     margin-top: 10px;
   }
