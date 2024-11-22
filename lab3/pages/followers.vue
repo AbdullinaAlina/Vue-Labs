@@ -1,5 +1,4 @@
 <template>
-    <Sidebar @categorySelected="updateSelectedCategory" />
     <div class="following-page">
       <h1 class="page-title">Followers</h1>
       <div class="following-list">

@@ -1,5 +1,4 @@
 <template>
-  <Sidebar @categorySelected="updateSelectedCategory" />
   <div class="profile">
     <div v-if="user" class="profile__container">
       <div class="user__profile">

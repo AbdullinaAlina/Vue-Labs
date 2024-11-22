@@ -2,7 +2,7 @@
 <template>
   <div class="card">
     <div class="card__header">
-      <NuxtLink v-if="user" :to="`/user/${user.id}`">
+      <NuxtLink v-if="user" :to="profileLink">
         <div class="card__user">
           <img
             class="card__avatar"
@@ -87,6 +87,12 @@ export default {
       const userStore = useUserStore();
       return String(userStore.user?.id) === String(this.post?.userId);
     },
+    profileLink() {
+      if (this.isAuthor) {
+        return "/profile";
+      }
+      return this.user ? `/user/${this.user.id}` : "#";
+  },
     formattedPubDate() {
       const pubDate = new Date(this.post.PubDate);
       const now = new Date();

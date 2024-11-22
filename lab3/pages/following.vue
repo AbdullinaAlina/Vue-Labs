@@ -1,5 +1,4 @@
 <template>
-    <Sidebar @categorySelected="updateSelectedCategory" />
     <div class="following-page">
       <h1 class="page-title">Following</h1>
       <div class="following-list">
@@ -22,7 +21,7 @@
   onMounted(() => {
     store.fetchFollowingUserData();
   });
-  
+
   </script>
   
   <style scoped>

@@ -40,7 +40,6 @@ export const useStore = defineStore('main', {
           }
         },
         getUserById(userId) {
-          console.log(this.users);
             return this.users.find(user => String(user.id) === String(userId));
         },
         async followUser(currentUserId, followedUserId) {

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Sidebar />
     <NuxtPage />
     <!-- <NuxtRouteAnnouncer />
     <NuxtWelcome /> -->
@@ -7,6 +8,7 @@
 </template>
 
 <script setup>
+import Sidebar from './components/Sidebar.vue';
 import { useStore } from '/stores/useStore';
 
 const store = useStore();

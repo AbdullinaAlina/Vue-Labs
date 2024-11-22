@@ -1,7 +1,6 @@
 <!-- pages/index.vue -->
 
 <template>
-    <Sidebar @categorySelected="updateSelectedCategory"/>
     <Feed :selectedCategory="selectedCategory"/>
 </template>
 

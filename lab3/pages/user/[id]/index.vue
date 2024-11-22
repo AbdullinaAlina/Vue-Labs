@@ -1,5 +1,4 @@
 <template>
-  <Sidebar @categorySelected="updateSelectedCategory"/>
   <div class="user">
     <div v-if="user" class="user__container">
       <div class="user__profile">
@@ -21,8 +20,10 @@
             <NuxtLink :to="`/user/${user.id}/followers`">
               <p>{{ user.followers.length }} followers</p>
             </NuxtLink>
+            <NuxtLink :to="`/user/${user.id}/followings`">
+              <p>{{ user.following.length }} following</p>
+            </NuxtLink>
             
-            <p>{{ user.following.length }} following</p>
           </div>
           <div class="user__bio">
             <p>Age: {{ user.age }}</p>
