@@ -55,9 +55,14 @@
   return !isFollowing.value ;
 });
 
-  
-  
-;
+    const followUser = () => {
+        userStore.followUser(String(props.user.id));
+  };
+
+  const unfollowUser = () => {
+    userStore.unfollowUser(String(props.user.id));
+  };
+
   const handleChat = async () => {
     const loggedInUserId = userStore.user.id;
     const targetUserId = props.user.id;

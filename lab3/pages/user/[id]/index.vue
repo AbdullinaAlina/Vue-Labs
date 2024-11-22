@@ -58,20 +58,29 @@
 </template>
 
   <script setup>
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
   import { useStore } from '~/stores/useStore';
   import { useUserStore } from '~/stores/userStore';
+  import { useChatStore } from '~/stores/chatStore';
+
 
   import { computed, ref } from 'vue';
   import Post from '~/components/Post.vue';
   import Sidebar from '~/components/Sidebar.vue';
 
-
   const store = useStore();
   const userStore = useUserStore();
+  const chatStore = useChatStore();
 
   const route = useRoute();
+  const router = useRouter();
   const userId = route.params.id;
+
+  onMounted(() => {
+    console.log("heey");
+    userStore.fetchFollowerUserData();
+    userStore.fetchFollowingUserData();
+  });
 
   const isFollowing = computed(() => {
     return userStore.user?.followingUsers.includes(String(userId))
@@ -119,6 +128,18 @@
  
   const unfollowUser = () => {
     userStore.unfollowUser(String(userId));
+  };
+
+  const chatUser = async() => {
+    const loggedInUserId = userStore.user.id;
+    const targetUserId = userId;
+    try {
+      const chatId = await chatStore.createChat([loggedInUserId, targetUserId]);
+      await chatStore.loadMessages(chatId);
+      router.push(`/chats/${chatId}`);
+    } catch (error) {
+      console.error('Error opening chat:', error);
+    }
   };
 
   </script>

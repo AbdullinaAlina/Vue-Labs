@@ -64,6 +64,7 @@
       console.error('Error opening chat:', error);
     }
   }
+  
   </script>
   
   <style scoped>
@@ -85,6 +86,7 @@
     align-items: center;
     gap: 16px;
   }
+
   .user__avatar {
     width: 96px;
     height: 96px;

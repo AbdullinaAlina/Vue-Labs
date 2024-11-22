@@ -112,6 +112,12 @@ const userStore = useUserStore();
 const user = computed(() => userStore.user);
 const store = useStore();
 
+onMounted(() => {
+    console.log("heey");
+    userStore.fetchFollowerUserData();
+    userStore.fetchFollowingUserData();
+  });
+
 const updatedUser = ref({
   username: user.value.username,
   email: user.value.email,

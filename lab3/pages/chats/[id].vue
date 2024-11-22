@@ -92,7 +92,7 @@ import Sidebar from "~/components/Sidebar.vue";
   
       // Simulate an auto-reply
       setTimeout(() => {
-        chatStore.sendMessage(chatId, "Automated reply", otherUserId.value);
+        chatStore.sendMessage(chatId, "Thanks for your message! I will reply to it soon.", otherUserId.value);
       }, 1000);
     }
   };
@@ -108,6 +108,7 @@ import Sidebar from "~/components/Sidebar.vue";
   .chat__messages {
     display: flex;
     flex-direction: column;
+    padding: 24px 0;
     width: 50%;
 
   }
@@ -116,7 +117,6 @@ import Sidebar from "~/components/Sidebar.vue";
   display: flex;
   align-items: center;
   gap: 8px; /* Add spacing between input and button */
-  margin-top: 16px; /* Add space above the form */
   width: 50%;
 }
 
