@@ -204,7 +204,7 @@ const nextPage = () => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 24px 0;
 }
 
 .user__profile {

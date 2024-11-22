@@ -1,7 +1,5 @@
 <template>
   <div class="statistics-page">
-    <Sidebar @categorySelected="updateSelectedCategory" />
-
     <div class="statistics__container">
       <h2>Post Statistics</h2>
 
@@ -73,12 +71,11 @@ const fetchStatistics = async () => {
   background-image: url(/assets/background.png);
   background-size: cover;
   background-repeat: no-repeat;
-  display: flex;
   flex-direction: column;
+  padding: 24px 0;
 }
 
 .statistics__container {
-  flex: 1;
   padding: 32px;
   margin: auto;
   width: 80%;
@@ -94,11 +91,16 @@ h2 {
 }
 
 .date-picker {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 32px;
 }
 
 .date-picker__inputs {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 12px;
 }
