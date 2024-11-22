@@ -47,7 +47,9 @@
     background-color: #f4f4f4;
     padding: 16px;
     border-radius: 12px;
+    text-align: left;
   }
+
   .message__info {
     display: flex;
     align-items: center;
