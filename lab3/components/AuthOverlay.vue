@@ -7,7 +7,7 @@
         <button class="auth-button sign-up" @click="redirectToRegister">Sign up</button>
       </div>
       <div v-else class="overlay__buttons">
-        <router-link class="profile-link" to="/profile">My Profile</router-link>
+        <button class="auth-button login" @click="handleProfile">My Profile</button>
         <button class="auth-button" @click="handleLogout">Log Out</button>
       </div>
       <div v-if="showRegisterForm" class="register-form">
@@ -80,12 +80,26 @@ const handleRegister = () => {
   closeOverlay();
 };
 
+const handleProfile = () => {
+  router.push('/profile');
+  closeOverlay();
+};
+
 const handleLogout = () => {
   userStore.logout();
   closeOverlay();
 };
 
 const user = computed(() => userStore.user);
+
+watch(
+  () => user.value.isAuth,
+  (isAuth) => {
+    if (isAuth) {
+      closeOverlay();
+    }
+  }
+);
 </script>
 
   
@@ -126,7 +140,7 @@ const user = computed(() => userStore.user);
   .overlay__buttons {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
   }
   
   .auth-button {
