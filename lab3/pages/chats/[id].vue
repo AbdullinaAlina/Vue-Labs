@@ -1,5 +1,4 @@
 <template>
-    <Sidebar />
     <div class="chat" v-if="userId">
       <h2>Chat with {{ otherUserName }}</h2>
       <div class="chat__messages">

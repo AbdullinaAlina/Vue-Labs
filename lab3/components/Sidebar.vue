@@ -25,7 +25,11 @@
       </div>
   
       <div class="profile-icon" @click="toggleOverlay">
-        <font-awesome :icon="['fas', 'user']" />
+          <img
+            class="profile__avatar"
+            :src="user.avatar ? user.avatar : '/assets/no_pfp.svg'"
+            alt="Avatar"
+          />
       </div>
   
       <AuthOverlay
@@ -121,14 +125,15 @@
   }
   
   .profile-icon {
+    display: flex;
+    align-items: center;
     cursor: pointer;
-    margin-left: auto; /* Aligns the profile icon to the right */
-    padding: 16px;
     color: #000; /* Adjust color as needed */
-    position: relative;
   }
 
-  
+  .profile__avatar {
+    width: 36px;
+  }
 
   
   .sidebar__categories li:hover {

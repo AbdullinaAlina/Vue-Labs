@@ -2,12 +2,11 @@
   <div class="auth-overlay" v-if="isOpen" @click.self="closeOverlay">
     <div class="overlay__content" @click.stop>
       <h2 class="overlay__title">Get started</h2>
-      <div class="overlay__buttons" v-if="!user.isAuth">
+      <div v-if="!user.isAuth" class="overlay__buttons">
         <button class="auth-button login" @click="showLoginOverlay">Login</button>
         <button class="auth-button sign-up" @click="redirectToRegister">Sign up</button>
       </div>
-      <div v-else>
-        <h3 class="welcome-message">Welcome, {{ user.username }}!</h3>
+      <div v-else class="overlay__buttons">
         <router-link class="profile-link" to="/profile">My Profile</router-link>
         <button class="auth-button" @click="handleLogout">Log Out</button>
       </div>
@@ -95,7 +94,6 @@ const user = computed(() => userStore.user);
     position: absolute;
     top: 0px; 
     right: 0px; 
-    
     z-index: 1000;
     display: flex;
     justify-content: flex-end;
@@ -133,6 +131,7 @@ const user = computed(() => userStore.user);
   
   .auth-button {
     border-radius: 5px;
+    border: none;
     padding: 10px 15px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -140,7 +139,6 @@ const user = computed(() => userStore.user);
 
   .login {
     background-color: #5bb9cd;
-    border: none;
     color: white;
   }
   
