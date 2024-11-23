@@ -43,8 +43,8 @@
     <div class="card__actions">
       <button
         class="card__like-button"
-        @click="toggleLike"
-        :style="{ color: post.isLiked ? '#007BFF' : '#cccccc' }"
+        @click="toggleLike(post.id)"
+        :style="{ color: isLiked ? '#007BFF' : '#cccccc' }"
         :disabled="isAuthor"
       >
         <font-awesome :icon="['fas', 'thumbs-up']" />
@@ -87,6 +87,10 @@ export default {
       const userStore = useUserStore();
       return String(userStore.user?.id) === String(this.post?.userId);
     },
+    isLiked() {
+      const userStore = useUserStore();
+      return userStore.user.likedPosts.includes(this.post.id);
+    },
     profileLink() {
       if (this.isAuthor) {
         return "/profile";
@@ -111,8 +115,12 @@ export default {
   },
   methods: {
     toggleLike() {
-      this.post.isLiked = !this.post.isLiked;
-      this.post.likeCount += this.post.isLiked ? 1 : -1;
+      const userStore = useUserStore();
+      if (this.isLiked) {
+        userStore.unlikePost(this.post.id);
+      } else {
+        userStore.likePost(this.post.id);
+      }
     },
     fetchUser() {
       const userStore = useStore();
@@ -124,8 +132,10 @@ export default {
         this.user = foundUser;
       }
     },
-    deletePost() {
-      console.log(`Post by user ${this.post.userId} deleted.`);
+    async deletePost() {
+      const store = useStore();
+      await store.deletePost(this.post.id);
+
       // Add logic for deleting the post
     },
   },

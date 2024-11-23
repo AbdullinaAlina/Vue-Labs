@@ -1,7 +1,7 @@
 // useStore
 import {defineStore} from 'pinia';
 import { db } from "@/plugins/firebase";
-import { collection, doc, addDoc, onSnapshot, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { collection, doc, addDoc, onSnapshot, updateDoc, arrayUnion, arrayRemove, deleteDoc, setDoc } from "firebase/firestore";
 import { useUserStore } from './userStore';
 
 export const useStore = defineStore('main', {
@@ -22,6 +22,9 @@ export const useStore = defineStore('main', {
               this.posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             });
         },
+        getUserById(userId) {
+            return this.users.find(user => String(user.id) === String(userId));
+        },
         async uploadDataToFirestore() {
           try {
             // Upload users
@@ -39,9 +42,28 @@ export const useStore = defineStore('main', {
             console.error("Error uploading data to Firestore:", error);
           }
         },
-        getUserById(userId) {
-            return this.users.find(user => String(user.id) === String(userId));
+
+        async createPost(post) {
+          try {
+            const postId = post.id || Date.now().toString();
+            const postRef = doc(db, 'posts', postId); 
+            await setDoc(postRef, { ...post, id: postId }); // Ensure id is included in the document
+          } catch (error) {
+            console.error("Error adding post:", error);
+          }
         },
+
+        async deletePost(postId) {
+          try {
+            const postRef = doc(db, 'posts', postId); 
+            await deleteDoc(postRef); 
+            } catch (error) {
+            console.error("Error deleting post:", error);
+            throw error;
+          }
+        },
+        
+        
         async followUser(currentUserId, followedUserId) {
             try {
                 const currentUserDocRef = doc(db, 'users', String(currentUserId));
@@ -104,7 +126,6 @@ export const useStore = defineStore('main', {
         }
       },
       async fetchFollowingUserData(userId) {
-        
         try {
             const followingData = [];
             const user = getUserById(userId);

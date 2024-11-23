@@ -9,5 +9,6 @@
   function uploadData() {
     store.uploadDataToFirestore();
   }
+  
   </script>
   

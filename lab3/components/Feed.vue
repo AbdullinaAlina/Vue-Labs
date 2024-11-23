@@ -23,12 +23,6 @@
       
 
   <div class="posts-grid">
-    <!-- <Post 
-    v-for="(post, index) in paginatedPersons" 
-    :key="post.id" 
-    :post="post" 
-    :user="getUserById(post.userId)"
-    /> -->
     <Post 
       v-for="post in paginatedPosts"
       :post="post" 

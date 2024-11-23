@@ -8,7 +8,8 @@
       </div>
       <div v-else class="overlay__buttons">
         <button class="auth-button login" @click="handleProfile">My Profile</button>
-        <button class="auth-button" @click="handleLogout">Log Out</button>
+        <button class="auth-button" @click="handleFavorites">Favorites</button>
+        <button class="auth-button logout" @click="handleLogout">Log Out</button>
       </div>
       <div v-if="showRegisterForm" class="register-form">
         <h3 class="form-title">Register</h3>
@@ -85,6 +86,11 @@ const handleProfile = () => {
   closeOverlay();
 };
 
+const handleFavorites = () => {
+  router.push('/favorites');
+  closeOverlay();
+};
+
 const handleLogout = () => {
   userStore.logout();
   closeOverlay();
@@ -158,6 +164,12 @@ watch(
   
   .login:hover {
     background-color: #28536B;
+  }
+
+  .logout {
+    background: none;
+    text-decoration: underline;
+    padding: 0;
   }
 
   .sign-up {

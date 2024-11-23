@@ -72,6 +72,11 @@
         </div>
       </div>
 
+      <div class="create-post">
+        <textarea v-model="newPost.Commentary" placeholder="What's on your mind?" rows="4"></textarea>
+        <button @click="createPost">Post</button>
+      </div>
+
       <div class="user__posts">
         <h2>Latest Posts</h2>
         <div class="posts-grid">
@@ -79,7 +84,6 @@
             v-for="post in paginatedPosts"
             :key="post.id"
             :post="post"
-            :profile="profile"
           />
         </div>
         <div class="pagination">
@@ -105,7 +109,6 @@ import { db } from '~/plugins/firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 
 import Post from '~/components/Post.vue';
-import Sidebar from '~/components/Sidebar.vue';
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
@@ -125,10 +128,20 @@ const updatedUser = ref({
   rating: user.value.rating,
 });
 
+const newPost = ref({
+  Commentary: '',
+  userId: null, 
+  PubDate: new Date().toLocaleDateString('en-CA'),
+  Rating: 0,
+  Topic: "",
+  isLiked: false,
+  likeCount: 0,
+  id: null
+});
+
 let originalUserData = { ...updatedUser.value };
 const isEditing = ref(false);
 
-// Watch for changes in the user data
 watch(user, (newUser) => {
   updatedUser.value = {
     username: newUser.username,
@@ -159,18 +172,28 @@ const userPosts = computed(() => {
   return store.posts.filter((post) => String(post.userId) === String(user.value.id));
 });
 
-const deletePost = async (postId) => {
-  try {
-    // Delete post from Firestore
-    await deleteDoc(doc(db, 'posts', postId));
-    alert('Post deleted successfully');
-  } catch (error) {
-    console.error('Error deleting post:', error);
-    alert('Failed to delete post.');
+const createPost = () => {
+  newPost.value.userId = user.value.id;
+  newPost.value.id = newPost.value.userId + (new Date()).toISOString();
+
+  console.log(newPost.value.userId);
+  if (newPost.value.Commentary.trim() === '') {
+    alert('Post Commentary cannot be empty');
+    return;
   }
+
+  store.createPost(newPost.value).then(() => {
+    newPost.value.Commentary = ''; // Clear the post Commentary
+    alert('Post created successfully');
+  }).catch((error) => {
+    alert('Error creating post: ' + error.message);
+  });
 };
 
-// Pagination Setup
+const deletePost = async (postId) => {
+  await store.deletePost(postId);
+};
+
 const currentPage = ref(1);
 const itemsPerPage = 2;  // Change to 2 posts per page
 const totalPages = computed(() => Math.ceil(userPosts.value.length / itemsPerPage));
@@ -381,5 +404,29 @@ button {
   text-decoration: none;
   color: #5bb9cd;
   font-weight: bold;
+}
+
+.create-post {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.create-post textarea {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: none;
+}
+
+.create-post button {
+  padding: 10px 16px;
+  background-color: #5bb9cd;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }
 </style>

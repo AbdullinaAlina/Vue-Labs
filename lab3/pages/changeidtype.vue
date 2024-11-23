@@ -1,40 +1,62 @@
-<template>
-</template>
 
-<script>
-import { collection, getDocs, setDoc, doc, deleteDoc } from "firebase/firestore";
-import { db } from "@/plugins/firebase";
-
-async function migrateUsersToCustomIds() {
-    try {
-        const usersCollection = collection(db, "users");
-        const snapshot = await getDocs(usersCollection);
-
-        for (const docSnap of snapshot.docs) {
-            const userData = docSnap.data();
-            
-            // Check if the user has an `id` field in the data; this will be used as the new document ID.
-            if (userData.id) {
-                const newDocRef = doc(db, "users", String(userData.id)); // Use `userData.id` as document ID
-
-                // Set the new document with the desired ID
-                await setDoc(newDocRef, userData);
-
-                // Delete the old document with the auto-generated ID
-                await deleteDoc(docSnap.ref);
-                
-                console.log(`Migrated user with temporary ID ${docSnap.id} to custom ID ${userData.id}`);
-            } else {
-                console.warn(`User document ${docSnap.id} has no 'id' field, skipping migration.`);
+  <template>
+    <div>
+      <button @click="fixPostIds">Fix Post IDs</button>
+      <p v-if="statusMessage">{{ statusMessage }}</p>
+    </div>
+  </template>
+  
+  <script>
+  import { getDocs, collection, doc, setDoc, deleteDoc } from "firebase/firestore";
+  import { db } from '~/plugins/firebase';
+  
+  export default {
+    data() {
+      return {
+        statusMessage: '', // This will hold the status message
+      };
+    },
+    methods: {
+      async fixPostIds() {
+        const postsCollectionRef = collection(db, "posts");
+  
+        try {
+          // Display the loading message
+          this.statusMessage = 'Fixing post IDs...';
+  
+          // Fetch all documents in the 'posts' collection
+          const querySnapshot = await getDocs(postsCollectionRef);
+  
+          // Loop through each document in the collection
+          for (const docSnap of querySnapshot.docs) {
+            const docData = docSnap.data();
+            const docId = docData.id; // Get the id field from the document data
+  
+            // If the document id is not the same as the post's id
+            if (docSnap.id !== docId) {
+              // Create a reference to the new document with the 'id' field as the document ID
+              const newDocRef = doc(db, "posts", docId);
+              
+              // Copy the document data to the new document reference
+              await setDoc(newDocRef, docData);
+  
+              // After the new document is created, delete the old one
+              await deleteDoc(docSnap.ref);
+  
+              console.log(`Updated document id from ${docSnap.id} to ${docId}`);
             }
+          }
+  
+          // Once all IDs are fixed, update the status message
+          this.statusMessage = 'Document IDs updated successfully!';
+        } catch (error) {
+          // Handle any errors
+          console.error("Error updating document IDs:", error);
+          this.statusMessage = 'Error occurred while fixing post IDs.';
         }
-        console.log("Migration completed successfully.");
-    } catch (error) {
-        console.error("Error migrating users to custom IDs:", error);
+      }
     }
-}
-
-// Call this function only once to perform the migration
-migrateUsersToCustomIds();
-
-</script>
+  };
+  </script>
+  
+  

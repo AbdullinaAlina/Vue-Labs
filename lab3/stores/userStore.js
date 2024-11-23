@@ -4,7 +4,7 @@ import { auth, db } from '~/plugins/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { ref } from 'vue';
 import { useStore } from './useStore';
-import { doc, getDoc, getDocs } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, doc, getDoc, getDocs, increment, updateDoc } from 'firebase/firestore';
 
 export const useUserStore = defineStore('user', () => {
     const mainStore = useStore();
@@ -18,7 +18,8 @@ export const useUserStore = defineStore('user', () => {
         address: '',
         rating: 0,
         followingUsers: [],
-        followerUsers: [], // Array to store followed users
+        followerUsers: [], 
+        likedPosts: []
   });
 
   function setUserDetails (userData) {
@@ -32,6 +33,7 @@ export const useUserStore = defineStore('user', () => {
     user.value.rating = userData.rating || 0;
     user.value.followingUsers = userData.following || [];
     user.value.followerUsers = userData.followers || [];
+    user.value.likedPosts = userData.likedPosts || [];
   };
 
   // Register a new user
@@ -88,7 +90,6 @@ export const useUserStore = defineStore('user', () => {
     user.value.email = updatedData.email || user.value.email;
     user.value.age = updatedData.age || user.value.age;
     user.value.address = updatedData.address || user.value.address;
-    user.value.rating = updatedData.rating || user.value.rating;
   };
 
   const followingUserData = ref([]);
@@ -128,6 +129,71 @@ export const useUserStore = defineStore('user', () => {
         console.error('Error fetching follower users:', error);
       }
     }
+
+    const likedPostsData = ref([]); 
+
+    async function fetchLikedPostsData() {
+      try {
+        console.log('Fetching liked posts:', user.value.likedPosts); // Add this log
+        const likedPosts = [];
+        for (const postId of user.value.likedPosts) {
+          const postDocRef = doc(db, 'posts', String(postId));
+          const postDoc = await getDoc(postDocRef);
+          if (postDoc.exists()) {
+            likedPosts.push({ id: postDoc.id, ...postDoc.data() });
+          }
+        }
+        console.log('Fetched liked posts:', likedPosts); // Add this log
+        likedPostsData.value = likedPosts;
+      } catch (error) {
+        console.error('Error fetching liked posts:', error);
+      }
+    }
+
+    async function updateUserLikedPostsInFirestore(userId, postId, action) {
+      const userDocRef = doc(db, "users", userId);
+      console.log(typeof postId); // Should log 'string'
+
+      const postDocRef = doc(db, "posts", postId);
+
+      try {
+          if (action === 'like') {
+              await updateDoc(userDocRef, {
+                  likedPosts: arrayUnion(postId)
+              });
+              await updateDoc(postDocRef, {
+                likeCount: increment(1)
+            });
+          } else if (action === 'unlike') {
+              await updateDoc(userDocRef, {
+                  likedPosts: arrayRemove(postId)
+              });
+              await updateDoc(postDocRef, {
+                likeCount: increment(-1) 
+            });
+          }
+      } catch (error) {
+          console.error("Error updating liked posts in Firestore:", error);
+      }
+  }
+
+    async function likePost(postId) {
+      if (!user.value.likedPosts.includes(postId)) {
+          user.value.likedPosts.push(postId);
+
+          const posts = mainStore.posts;
+    
+          await updateUserLikedPostsInFirestore(user.value.id, postId, 'like');
+      }
+  }
+
+  async function unlikePost(postId) {
+    user.value.likedPosts = user.value.likedPosts.filter(id => id !== postId);
+    const posts = mainStore.posts;
+          
+    
+    await updateUserLikedPostsInFirestore(user.value.id, postId, 'unlike');
+}
     
   // Follow a user
   async function followUser(userId) {
@@ -152,5 +218,22 @@ export const useUserStore = defineStore('user', () => {
     fetchFollowerUserData();
   };
 
-  return { user, register, login, logout, updateUserDetails, fetchFollowingUserData, fetchFollowerUserData, followUser, unfollowUser, followingUserData, followerUserData, removeFollower};
+  return {
+    user, 
+    register, 
+    login, 
+    logout, 
+    updateUserDetails, 
+    fetchFollowingUserData, 
+    fetchFollowerUserData, 
+    fetchLikedPostsData,
+    followUser, 
+    unfollowUser, 
+    followingUserData, 
+    followerUserData, 
+    likedPostsData,
+    removeFollower,
+    likePost,
+    unlikePost
+  };
 });
