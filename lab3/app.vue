@@ -27,4 +27,10 @@ onMounted(() => {
     padding: 0;
     font-family: Roboto;
   }
+
+  a {
+    text-decoration: none;
+    color: #000000;
+  }
+  
 </style>
