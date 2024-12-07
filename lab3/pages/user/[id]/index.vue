@@ -6,7 +6,9 @@
         <div class="user__info">
           <div class="user__header">
             <div class="user__name">
-              <h3>{{ user.name }}</h3>
+              <!-- <h3>{{ user.name }}</h3> -->
+              <h3>{{ userStore.getDisplayName(user.id, user.username) }}</h3>
+
             </div>
             
             <div class="user__actions">

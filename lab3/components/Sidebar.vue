@@ -96,10 +96,15 @@
     position: relative;
     transition: width 1s ease-in;
     z-index: 1;
-    padding: 0 20px;
+    padding: 10px 20px;
   }
   
   .sidebar__icon {
+    width: 36px;
+    display: flex;
+    justify-content: center;
+    height: 36px;
+    align-items: center;
     cursor: pointer;
     border-radius: 100%;
     padding: 16px;

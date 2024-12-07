@@ -14,7 +14,9 @@
 
       <div class="card__info">
         <div class="card__posted">
-          <h2 class="card__username">{{ user?.name || "Unknown User" }}</h2>
+          <!-- <h2 class="card__username">{{ user?.name || "Unknown User" }}</h2> -->
+          <h2 class="card__username">{{ userStore.getDisplayName(user.id, user.username) }}</h2>
+
           <p class="card__date">{{ formattedPubDate }}</p>
         </div>
 
@@ -81,6 +83,10 @@ export default {
     return {
       user: null, // Store the user data for each post
     };
+  },
+  setup() {
+    const userStore = useUserStore();
+    return { userStore };
   },
   computed: {
     isAuthor() {

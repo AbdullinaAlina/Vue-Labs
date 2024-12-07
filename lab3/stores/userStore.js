@@ -19,7 +19,8 @@ export const useUserStore = defineStore('user', () => {
         rating: 0,
         followingUsers: [],
         followerUsers: [], 
-        likedPosts: []
+        likedPosts: [],
+        nicknames: {},
   });
 
   function setUserDetails (userData) {
@@ -34,6 +35,7 @@ export const useUserStore = defineStore('user', () => {
     user.value.followingUsers = userData.following || [];
     user.value.followerUsers = userData.followers || [];
     user.value.likedPosts = userData.likedPosts || [];
+    user.value.nicknames = userData.nicknames || {}; 
   };
 
   // Register a new user
@@ -189,9 +191,6 @@ export const useUserStore = defineStore('user', () => {
 
   async function unlikePost(postId) {
     user.value.likedPosts = user.value.likedPosts.filter(id => id !== postId);
-    const posts = mainStore.posts;
-          
-    
     await updateUserLikedPostsInFirestore(user.value.id, postId, 'unlike');
 }
     
@@ -218,6 +217,14 @@ export const useUserStore = defineStore('user', () => {
     fetchFollowerUserData();
   };
 
+  function getDisplayName(targetUserId, targetUserName) {
+    if (user.value.nicknames[targetUserId]) {
+        return user.value.nicknames[targetUserId]; // Return nickname
+    }
+    return targetUserName || "Unknown User"; // Fallback to real name
+}
+
+
   return {
     user, 
     register, 
@@ -234,6 +241,7 @@ export const useUserStore = defineStore('user', () => {
     likedPostsData,
     removeFollower,
     likePost,
-    unlikePost
+    unlikePost,
+    getDisplayName
   };
 });
