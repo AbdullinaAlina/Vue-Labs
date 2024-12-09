@@ -86,7 +86,7 @@
     align-items: center;
     gap: 16px;
   }
-
+  
   .user__avatar {
     width: 96px;
     height: 96px;
@@ -122,6 +122,42 @@
     border-radius: 8px;
     padding: 8px 12px;
     cursor: pointer;
+  }
+  
+  @media (max-width: 768px) {
+    .user {
+      flex-direction: row;
+      align-items: center;
+      text-align: center;
+      padding: 12px;
+      gap: 16px;
+    }
+  
+    .user__info {
+      flex-direction: row;
+      gap: 8px;
+      text-align: left;
+    }
+  
+    .user__avatar {
+      width: 72px;
+      height: 72px;
+    }
+  
+    .user__name {
+      font-size: 1rem;
+    }
+  
+    .user__actions {
+      flex-direction: row;
+      gap: 8px;
+    }
+  
+    .user__unfollow,
+    .user__chat {
+      font-size: 0.9rem;
+      padding: 6px 10px;
+    }
   }
   </style>
   

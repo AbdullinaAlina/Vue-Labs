@@ -59,30 +59,46 @@
   </script>
   
   
-    
-    <style scoped>
+  <style scoped>
+  .following-page {
+    padding: 32px;
+    background-image: url('/assets/background.png');
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+    margin-bottom: 32px;
+    color: #333;
+  }
+  
+  .following-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 50%;
+    max-width: 1200px;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
     .following-page {
-      padding: 32px;
-      background-image: url('/assets/background.png');
-      background-size: cover;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 16px;
     }
-    
+  
     .page-title {
-      font-size: 2rem;
-      margin-bottom: 32px;
-      color: #333;
+      font-size: 1.8rem;
+      margin-bottom: 24px;
     }
-    
+  
     .following-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: 50%;
-      max-width: 1200px;
+      width: 100%; /* Use full width for smaller screens */
+      gap: 12px;
     }
-    </style>
-    
+  }
+  </style>
+  

@@ -48,5 +48,20 @@
     width: 50%;
     max-width: 1200px;
   }
+  
+  @media (max-width: 768px) {
+    .following-page {
+      padding: 16px;
+    }
+  
+    .page-title {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+  
+    .following-list {
+      width: 100%;
+    }
+  }
   </style>
   

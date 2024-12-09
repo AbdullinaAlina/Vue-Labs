@@ -77,52 +77,47 @@
   </script>
   
   <style scoped>
-  .user {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 24px;
-    background-color: #ffffff;
-    border-radius: 16px;
-    padding: 16px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .user__info {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
-  }
-  .user__avatar {
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .user__name {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  .user__actions {
-    display: flex;
-    gap: 12px;
-    flex-shrink: 0;
-  }
-  
-  .user__unfollow {
-    background-color: #EC1C1C;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 12px;
-    cursor: pointer;
-  }
-  .user__follow,
+.user {
+  display: flex;
+  flex-direction: row; /* Row layout remains unchanged */
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.user__info {
+  display: flex;
+  flex-direction: row; /* Preserve row layout */
+  align-items: center;
+  gap: 16px;
+}
+
+.user__avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user__name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.user__actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Button Styles: Preserved */
+.user__follow,
 .user__unfollow,
 .user__message {
   padding: 8px 16px;
@@ -132,10 +127,10 @@
   font-weight: bold;
   cursor: pointer;
 }
-  .user__follow {
+
+.user__follow {
   background-color: #5bb9cd;
   color: #ffffff;
-  border: none;
 }
 
 .user__unfollow {
@@ -145,5 +140,41 @@
 }
 
 
-  </style>
-  
+/* Responsive Adjustments: Layout Only */
+@media (max-width: 768px) {
+  .user {
+    flex-wrap: wrap; /* Allow wrapping for better fit */
+    gap: 16px; /* Adjust spacing */
+    padding: 12px; /* Reduce padding for smaller screens */
+  }
+
+  .user__info {
+    flex: 1;
+    flex-direction: row; /* Still row-based layout */
+    align-items: center;
+    gap: 12px; /* Adjust gap for mobile */
+  }
+
+  .user__avatar {
+    width: 72px; /* Slightly smaller for mobile */
+    height: 72px;
+  }
+
+  .user__name {
+    font-size: 1rem; /* Adjust font size for compact view */
+  }
+
+  .user__actions {
+    flex-wrap: wrap; /* Allow buttons to wrap if needed */
+    gap: 8px; /* Reduce button spacing */
+    justify-content: center;
+  }
+
+  .user__follow,
+  .user__unfollow,
+  .user__message {
+    padding: 6px 12px; /* Compact button padding */
+    font-size: 0.85rem; /* Adjust font size */
+  }
+}
+</style>

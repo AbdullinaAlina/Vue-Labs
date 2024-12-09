@@ -16,6 +16,8 @@ export const useChatStore = defineStore("chat", {
 
       onSnapshot(q, (snapshot) => {
         this.chats = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        console.log("Chats fetched:", this.chats); // Debugging line
+
       });
     },
 
