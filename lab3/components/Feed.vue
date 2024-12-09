@@ -125,17 +125,29 @@ export default {
 
 
 .feed {
-align-items: center;
-background-image: url(/assets/background.png);
-background-repeat: no-repeat;
-background-size: cover;
-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%; /* Take full width of the screen */
+  padding: 20px;
+  background-image: url(/assets/background.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh; /* Ensure it grows with content */
+  overflow-x: hidden; /* Prevent horizontal overflow */
+}
 
-display: flex;
-flex-direction: column;
-text-align: center;
-width: 100%;
-padding: 20px 0;
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two equal columns by default */
+  gap: 24px;
+  margin: 0 auto; /* Center grid horizontally */
+  padding: 20px; /* Inner padding */
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  width: 100%; /* Use all available width */
+  box-sizing: border-box; /* Include padding in width */
 }
 
 .header {
@@ -164,17 +176,12 @@ padding: 4px 8px;
 font-size: 16px;
 }
 
-.posts-grid {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 24px; 
-margin-bottom: 24px;
-justify-content: center;
-padding: 30px;
-background-color: rgb(255, 255, 255, 0.7);
-border-radius: 8px;
-width: 80%;
+
+.posts-grid > * {
+  max-width: 100%; /* Prevent posts from exceeding grid boundaries */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
+
 
 /* Specifically place each post in the correct position */
 .posts-grid > *:nth-child(1) {
@@ -208,4 +215,15 @@ grid-row: 2;
 .pagination button {
   padding: 8px;
 }
+
+
+
+/* Media Query: Adjust for smaller screens */
+@media (max-width: 768px) {
+  .posts-grid {
+    grid-template-columns: 1fr; /* Single column for smaller screens */
+    gap: 16px; /* Reduce gap between items */
+  }
+}
+
 </style>

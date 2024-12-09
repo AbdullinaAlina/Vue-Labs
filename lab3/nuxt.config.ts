@@ -14,7 +14,16 @@ export default defineNuxtConfig({
   ],
   fontawesome: {
     icons: {
-      solid: ['bars', 'user', 'star', 'star-half', 'star-half-stroke', 'thumbs-up', 'chevron-right', 'chevron-left'],
+      solid: [
+        'bars', 
+        'user', 
+        'star', 'star-half', 'star-half-stroke', 
+        'thumbs-up', 
+        'chevron-right', 'chevron-left',
+        'heart',
+        'comment',
+        'arrow-down'
+      ],
       regular: ['star', 'star-half','star-half-stroke']
     }
   },
