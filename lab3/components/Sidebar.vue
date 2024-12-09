@@ -29,7 +29,7 @@
     <div class="profile-icon" @click="toggleOverlay">
       <img
         class="profile__avatar"
-        :src="user?.Avatar || '/assets/no_pfp.svg'"
+        :src="user?.avatar || '/assets/no_pfp.svg'"
         alt="Avatar"
       />
     </div>
@@ -239,5 +239,11 @@ const goToFavorites = () => {
 .mobile-toolbar__category:hover {
   background-color: #007BFF;
   color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    justify-content: flex-end;
+  }
 }
 </style>

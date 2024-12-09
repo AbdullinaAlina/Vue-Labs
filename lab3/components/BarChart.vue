@@ -18,16 +18,30 @@
     },
   });
   
-  const chartData = computed(() => ({
-    labels: props.data.map((entry) => entry.x),
+
+  import { format, compareAsc } from 'date-fns';
+
+  const chartData = computed(() => {
+  const sortedData = [...props.data].sort((a, b) =>
+    new Date(a.x) - new Date(b.x) // Sort by date
+  );
+
+  return {
+    labels: sortedData.map((entry) =>
+      format(new Date(entry.x), 'd MMMM') // Convert to desired format
+    ),
     datasets: [
       {
         label: 'Number of Posts',
         backgroundColor: '#5bb9cd',
-        data: props.data.map((entry) => entry.y),
+        data: sortedData.map((entry) => entry.y),
       },
     ],
-  }));
+  };
+});
+
+
+
   
   const options = {
     responsive: true,

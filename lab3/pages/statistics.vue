@@ -7,12 +7,17 @@
       <div class="date-picker">
         <label for="date-range">Select Date Range:</label>
         <div class="date-picker__inputs">
-          <input type="date" v-model="startDate" class="date-input" /> 
-          <span>to</span>
-          <input type="date" v-model="endDate" class="date-input" />
+          <input
+            id="date-range"
+            type="text"
+            ref="dateRangePicker"
+            class="date-input"
+            placeholder="Select date range"
+          />
           <button @click="fetchStatistics" class="btn-fetch">Show Statistics</button>
         </div>
       </div>
+
 
       <!-- Bar Chart -->
       <div v-if="chartData.length" class="chart-container">
@@ -26,10 +31,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import BarChart from '~/components/BarChart.vue';
-import Sidebar from '~/components/Sidebar.vue';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
+import { ref, onMounted } from 'vue';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '~/plugins/firebase';
 import { format } from 'date-fns';
@@ -37,11 +42,19 @@ import { format } from 'date-fns';
 const startDate = ref('');
 const endDate = ref('');
 const chartData = ref([]);
+const dateRangePicker = ref(null);
 
 const userStore = useUserStore();
 const user = userStore.user;
 
 const fetchStatistics = async () => {
+  if (!startDate.value || !endDate.value) {
+    alert('Please select a valid date range.');
+    return;
+  }
+
+  console.log('Fetching statistics for:', startDate.value, endDate.value);
+
   const q = query(collection(db, 'posts'), where('userId', '==', user.id));
   const snapshot = await getDocs(q);
 
@@ -49,19 +62,44 @@ const fetchStatistics = async () => {
   const start = new Date(startDate.value);
   const end = new Date(endDate.value);
 
+  console.log('Start Date:', start, 'End Date:', end);
+
   snapshot.forEach((doc) => {
     const post = doc.data();
-    const postDate = new Date(post.PubDate);
 
-    if (postDate >= start && postDate <= end) {
-      const dateStr = format(postDate, 'd MMMM y'); // Group posts by formatted date
-      if (!data[dateStr]) data[dateStr] = 0;
-      data[dateStr] += 1; // Increment the count for posts published on this date
+    // Normalize all dates to the YYYY-MM-DD format
+    const postDate = new Date(post.PubDate).toISOString().split('T')[0];
+
+    if (postDate >= startDate.value && postDate <= endDate.value) {
+      if (!data[postDate]) data[postDate] = 0;
+      data[postDate] += 1; // Increment count for the normalized date
     }
   });
 
-  chartData.value = Object.keys(data).map((date) => ({ x: date, y: data[date] }));
+  // Sort data by date
+  const sortedData = Object.keys(data)
+    .sort()
+    .map((date) => ({ x: date, y: data[date] }));
+
+  chartData.value = sortedData;
+  console.log('Chart Data:', chartData.value);
 };
+
+
+// Initialize flatpickr
+onMounted(() => {
+  flatpickr(dateRangePicker.value, {
+    mode: 'range',
+    dateFormat: 'Y-m-d',
+    onChange: (selectedDates) => {
+      if (selectedDates.length === 2) {
+        startDate.value = selectedDates[0].toISOString().split('T')[0];
+        endDate.value = selectedDates[1].toISOString().split('T')[0];
+      }
+    },
+  });
+});
+
 
 </script>
 
@@ -133,4 +171,78 @@ h2 {
   margin-top: 16px;
   font-size: 1rem;
 }
+
+.date-picker__inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.date-input {
+  width: 100%; /* Full width for input */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.btn-fetch {
+  padding: 8px 16px;
+  background-color: #5bb9cd;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+  .statistics-page {
+    padding-top: 16px; /* Reduce padding on smaller screens */
+    padding-bottom: 96px;
+  }
+
+  .statistics__container {
+    width: 90%; /* Full width for mobile */
+    padding: 16px; /* Reduce padding */
+    margin: 0 auto;
+  }
+
+  h2 {
+    font-size: 1.5rem; /* Adjust heading size */
+    margin-bottom: 16px; /* Reduce margin */
+  }
+
+  .date-picker {
+    gap: 4px; /* Reduce spacing */
+    margin-bottom: 24px; /* Reduce margin */
+  }
+
+  .date-picker__inputs {
+    flex-direction: column; /* Stack inputs vertically */
+    gap: 8px; /* Add vertical spacing */
+  }
+
+  .date-input {
+    width: 100%; /* Make inputs full-width */
+    font-size: 0.85rem; /* Adjust font size */
+  }
+
+  .btn-fetch {
+    width: 100%; /* Full width for button */
+    font-size: 0.85rem; /* Adjust font size */
+  }
+
+  .chart-container {
+    margin-top: 24px; /* Reduce margin */
+  }
+
+  .no-data-message {
+    font-size: 0.9rem; /* Adjust font size */
+    margin-top: 12px; /* Reduce margin */
+  }
+}
+
 </style>

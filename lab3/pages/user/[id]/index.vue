@@ -284,4 +284,90 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .user {
+    padding: 8px;
+  }
+
+  .user__container {
+    width: 100%;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .user__profile {
+    flex-direction: column; /* Stack profile info vertically */
+    align-items: center;
+    gap: 16px;
+  }
+
+  .user__avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .user__info {
+    align-items: center;
+    gap: 12px;
+  }
+
+  .user__header {
+    flex-direction: column; /* Stack header content vertically */
+    align-items: center;
+    gap: 8px;
+  }
+
+  .user__name h3 {
+    font-size: 1.5rem;
+  }
+
+  .user__actions {
+    flex-direction: row; /* Stack buttons vertically */
+    gap: 8px;
+  }
+
+  .user__follow,
+  .user__unfollow,
+  .user__message {
+    width: 100%;
+    font-size: 0.8rem;
+  }
+
+  .user__statistic {
+    flex-direction: row; /* Stack stats vertically */
+    align-items: center;
+    gap: 12px;
+  }
+
+  .user__bio {
+    text-align: center; /* Center-align bio text */
+  }
+
+  .user__posts {
+    text-align: center;
+    width: 100%;
+  }
+
+  .posts-grid {
+    grid-template-columns: 1fr; /* Single column grid for posts */
+    gap: 12px; /* Reduce gap between posts */
+  }
+
+  .pagination {
+    gap: 4px;
+    margin-top: 12px;
+  }
+
+  .pagination button {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+
+  .pagination__page {
+    font-size: 0.9rem;
+  }
+}
+
 </style>

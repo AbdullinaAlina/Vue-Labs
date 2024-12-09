@@ -131,7 +131,7 @@ const updatedUser = ref({
 const newPost = ref({
   Commentary: '',
   userId: null, 
-  PubDate: new Date().toLocaleDateString('en-CA'),
+  PubDate: new Date().toISOString(),
   Rating: 0,
   Topic: "",
   isLiked: false,
@@ -169,8 +169,11 @@ const handleUpdate = () => {
 };
 
 const userPosts = computed(() => {
-  return store.posts.filter((post) => String(post.userId) === String(user.value.id));
+  return store.posts
+    .filter((post) => String(post.userId) === String(user.value.id))
+    .sort((a, b) => new Date(b.PubDate) - new Date(a.PubDate)); // Sort by date (descending)
 });
+
 
 const createPost = () => {
   newPost.value.userId = user.value.id;
@@ -429,4 +432,120 @@ button {
   border-radius: 8px;
   cursor: pointer;
 }
+/* Mobile styles */
+@media (max-width: 768px) {
+  .profile {
+    padding: 16px 8px;
+  }
+
+  .profile__container {
+    width: 100%;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .user__profile {
+    flex-direction: column; /* Stack avatar and info vertically */
+    align-items: center;
+    gap: 16px;
+  }
+
+  .profile__avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile__info {
+    align-items: center;
+    gap: 12px;
+  }
+
+  .profile__header {
+    flex-direction: column; /* Stack name and actions vertically */
+    align-items: center;
+    gap: 8px;
+  }
+
+  .profile__name h3 {
+    font-size: 1.5rem;
+  }
+
+  .profile__actions {
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .profile__edit,
+  .profile__save,
+  .profile__cancel,
+  .profile__stats {
+    font-size: 0.8rem;
+    width: 100%; /* Full width buttons for mobile */
+  }
+
+  .profile__statistic {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .profile__bio {
+    gap: 8px;
+    display: flex
+;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile__age,
+  .profile__address {
+    flex-direction: row; 
+    align-items: center;
+    gap: 4px;
+  }
+
+  .create-post {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .create-post textarea {
+    font-size: 0.9rem;
+  }
+
+  .user-posts {
+    width: 100%;
+  }
+
+  .posts-grid {
+    grid-template-columns: 1fr; /* Single column grid for posts */
+    gap: 12px;
+  }
+
+  .pagination {
+    gap: 4px;
+    margin-top: 12px;
+  }
+
+  .pagination__page {
+    font-size: 0.8rem;
+  }
+
+  .pagination button {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+
+  .profile-navigation {
+    flex-direction: column; /* Stack navigation links */
+    gap: 12px;
+  }
+
+  .profile-navigation a {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+}
+
 </style>

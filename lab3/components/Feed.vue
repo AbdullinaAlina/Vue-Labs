@@ -128,6 +128,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 24px;
   text-align: center;
   width: 100%; /* Take full width of the screen */
   padding: 20px;
@@ -136,6 +137,7 @@ export default {
   background-size: cover;
   min-height: 100vh; /* Ensure it grows with content */
   overflow-x: hidden; /* Prevent horizontal overflow */
+  padding-bottom: 96px;
 }
 
 .posts-grid {
@@ -146,7 +148,7 @@ export default {
   padding: 20px; /* Inner padding */
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 8px;
-  width: 100%; /* Use all available width */
+  width: 80%; /* Use all available width */
   box-sizing: border-box; /* Include padding in width */
 }
 
@@ -221,8 +223,10 @@ grid-row: 2;
 /* Media Query: Adjust for smaller screens */
 @media (max-width: 768px) {
   .posts-grid {
-    grid-template-columns: 1fr; /* Single column for smaller screens */
+    display: flex;
+    flex-direction: column;
     gap: 16px; /* Reduce gap between items */
+    width: 100%;
   }
 }
 

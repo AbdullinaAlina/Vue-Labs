@@ -223,5 +223,13 @@ watch(
   .form-button:hover {
     background-color: #218838;
   }
+
+  @media (max-width: 768px) {
+    .overlay__content {
+    right: 10px;
+    top: 56px;
+  }
+  }
+  
 </style>
   

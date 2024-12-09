@@ -165,6 +165,7 @@ export default {
   border-radius: 10px;
   padding: 24px;
   text-align: left;
+  width: 100%;
 }
 
 .card__header {
@@ -247,5 +248,21 @@ button {
 
 button i {
   margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 12px; /* Reduce padding on mobile */
+  }
+
+  .card__posted {
+    flex-direction: column; /* Stack post info vertically */
+    align-items: flex-start; /* Align text to the left */
+    gap: 4px; /* Reduce spacing between elements */
+  }
+}
+
+.card__avatar {
+  object-fit: cover; /* Prevent image distortion */
 }
 </style>
