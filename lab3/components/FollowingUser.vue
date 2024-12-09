@@ -9,7 +9,7 @@
                 />
             </NuxtLink>
             <NuxtLink :to="`/user/${user.id}`">
-                <h3 class="user__name">{{ user.name }}</h3>
+              <h3 class="user__name">{{ userStore.getDisplayName(user.id) }}</h3>
             </NuxtLink>   
         </div>
       

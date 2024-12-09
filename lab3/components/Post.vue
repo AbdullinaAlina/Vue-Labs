@@ -15,7 +15,7 @@
       <div class="card__info">
         <div class="card__posted">
           <!-- <h2 class="card__username">{{ user?.name || "Unknown User" }}</h2> -->
-          <h2 class="card__username">{{ userStore.getDisplayName(user.id, user.username) }}</h2>
+          <h2 class="card__username">{{ userStore.getDisplayName(user.id) }}</h2>
 
           <p class="card__date">{{ formattedPubDate }}</p>
         </div>

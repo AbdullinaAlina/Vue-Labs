@@ -217,12 +217,17 @@ export const useUserStore = defineStore('user', () => {
     fetchFollowerUserData();
   };
 
-  function getDisplayName(targetUserId, targetUserName) {
-    if (user.value.nicknames[targetUserId]) {
-        return user.value.nicknames[targetUserId]; // Return nickname
+  function getDisplayName(userId) {
+    const nicknames = user.value.nicknames || {};
+    const realName = mainStore.users.find((user) => user.id === userId)?.name || "No Name";
+    
+    if (nicknames[userId]) {
+      return nicknames[userId]; // Return nickname if it exists
     }
-    return targetUserName || "Unknown User"; // Fallback to real name
-}
+    
+    return realName; // Fallback to the real name
+  }
+  
 
 
   return {

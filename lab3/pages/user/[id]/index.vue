@@ -7,7 +7,7 @@
           <div class="user__header">
             <div class="user__name">
               <!-- <h3>{{ user.name }}</h3> -->
-              <h3>{{ userStore.getDisplayName(user.id, user.username) }}</h3>
+              <h3>{{ userStore.getDisplayName(user.id) }}</h3>
 
             </div>
             
@@ -255,7 +255,7 @@
 
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   margin-top: 16px;
 }
