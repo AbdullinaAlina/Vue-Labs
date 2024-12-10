@@ -79,8 +79,8 @@ export default {
       let filtered = this.store.posts;
         this.currentPage = 1;
 
-      if (this.selectedCategory) {
-        filtered = filtered.filter(post => post.Topic === this.selectedCategory);
+      if (this.store.selectedCategory) {
+        filtered = filtered.filter(post => post.Topic === this.store.selectedCategory);
       }
 
       if (this.sortingType === 'date') {

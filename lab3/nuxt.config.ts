@@ -22,9 +22,15 @@ export default defineNuxtConfig({
         'chevron-right', 'chevron-left',
         'heart',
         'comment',
-        'arrow-down'
+        'arrow-down',
+        'palette',
+        "laptop-code",
+        "chart-line",
+        "atom",
+        "heartbeat",
+        "list"
       ],
-      regular: ['star', 'star-half','star-half-stroke']
+      regular: ['star', 'star-half','star-half-stroke', 'heart', 'comment']
     }
   },
   plugins: [{ src: '~/plugins/firebase.js', mode: 'client' }],

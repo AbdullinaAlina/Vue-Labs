@@ -11,9 +11,7 @@
     </div>
 
     <div v-if="!isMobile" class="sidebar__menu" v-show="isSideBarOpen">
-      <button class="sidebar__button" @click="toggleSideBar">
-        Menu
-      </button>
+      <button class="sidebar__button" @click="toggleSideBar">Menu</button>
       <ul class="sidebar__categories">
         <li
           v-for="(category, index) in categories"
@@ -25,7 +23,7 @@
       </ul>
     </div>
 
-    <!-- Profile Icon (Both Mobile and Desktop) -->
+    <!-- Profile Icon -->
     <div class="profile-icon" @click="toggleOverlay">
       <img
         class="profile__avatar"
@@ -41,71 +39,42 @@
     />
 
     <!-- Mobile Toolbar -->
-    <div class="mobile-toolbar" v-if="isMobile">
-      <div class="mobile-toolbar__icons">
-        <NuxtLink :to="`/chats`">
-          <div class="mobile-toolbar__icon">
-          <font-awesome :icon="['fas', 'comment']" />
-        </div>
-        </NuxtLink>
-        
-        <div class="mobile-toolbar__icon" @click="toggleCategories">
-          <font-awesome :icon="isCategoriesOpen ? ['fas', 'arrow-down'] : ['fas', 'bars']" />
-        </div>
-        <NuxtLink :to="`/favorites`">
-          <div class="mobile-toolbar__icon" @click="goToFavorites">
-            <font-awesome :icon="['fas', 'heart']" />
-          </div>
-        </NuxtLink>
-        
-      </div>
-
-      <!-- Expanded Categories -->
-      <div class="mobile-toolbar__categories" v-if="isCategoriesOpen">
-        <div class="mobile-toolbar__grid">
-          <div
-            v-for="(category, index) in categories"
-            :key="index"
-            class="mobile-toolbar__category"
-            @click="selectCategory(category)"
-          >
-            {{ category }}
-          </div>
-        </div>
-      </div>
-    </div>
+    <MobileToolbar
+      v-if="isMobile"
+      @categorySelected="selectCategory"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, defineEmits, computed, onMounted, onUnmounted } from 'vue';
-import { useUserStore } from '~/stores/userStore'; // Import the user store
-import AuthOverlay from './AuthOverlay.vue';
-
-const emit = defineEmits(['categorySelected']);
+import MobileToolbar from "./MobileToolbar.vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useUserStore } from "~/stores/userStore";
+import { useStore } from "~/stores/useStore";
+import AuthOverlay from "./AuthOverlay.vue";
 
 const userStore = useUserStore();
+const store = useStore();
 const user = computed(() => userStore.user);
 
-const categories = ['Show All', 'Design', 'Technology', 'Science', 'Business', 'Health'];
+const emit = defineEmits(["categorySelected"]);
+
 const isSideBarOpen = ref(false);
 const isOverlayOpen = ref(false);
-const isCategoriesOpen = ref(false);
 const isMobile = ref(false); // Tracks whether the screen is mobile-sized
+const categories = ["Show All", "Design", "Technology", "Science", "Business", "Health"];
 
-// Check screen size on mounted
+// Check screen size
 onMounted(() => {
   const updateMobileState = () => {
     isMobile.value = window.innerWidth <= 768;
   };
 
-  // Set initial state and add listener
   updateMobileState();
-  window.addEventListener('resize', updateMobileState);
+  window.addEventListener("resize", updateMobileState);
 
-  // Clean up listener on unmounted
   onUnmounted(() => {
-    window.removeEventListener('resize', updateMobileState);
+    window.removeEventListener("resize", updateMobileState);
   });
 });
 
@@ -114,8 +83,12 @@ const toggleSideBar = () => {
 };
 
 const selectCategory = (category) => {
-  emit('categorySelected', category === 'Show All' ? null : category);
-  if (isCategoriesOpen.value) toggleCategories(); // Collapse toolbar after selection
+  if (category === "Show All") {
+    store.resetCategory(); 
+  } else {
+    store.setSelectedCategory(category); 
+  }
+  isSideBarOpen.value = false;
 };
 
 const toggleOverlay = () => {
@@ -125,19 +98,8 @@ const toggleOverlay = () => {
 const closeAuthOverlay = () => {
   isOverlayOpen.value = false;
 };
-
-const toggleCategories = () => {
-  isCategoriesOpen.value = !isCategoriesOpen.value;
-};
-
-const goToMessages = () => {
-  console.log('Navigate to Messages');
-};
-
-const goToFavorites = () => {
-  console.log('Navigate to Favorites');
-};
 </script>
+
 <style scoped>
 /* Desktop Sidebar */
 .sidebar {

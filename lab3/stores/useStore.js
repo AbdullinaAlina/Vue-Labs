@@ -8,6 +8,7 @@ export const useStore = defineStore('main', {
     state: () => ({
         users: [],
         posts: [],
+        selectedCategory: null,
     }),
     actions: {
         fetchUsers() {
@@ -21,6 +22,12 @@ export const useStore = defineStore('main', {
             onSnapshot(postsCollection, (snapshot) => {
               this.posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             });
+        },
+        setSelectedCategory(category) {
+          this.selectedCategory = category; 
+        },
+        resetCategory() {
+          this.selectedCategory = null; 
         },
         getUserById(userId) {
             return this.users.find(user => String(user.id) === String(userId));

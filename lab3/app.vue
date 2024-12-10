@@ -2,8 +2,6 @@
   <div>
     <Sidebar />
     <NuxtPage />
-    <!-- <NuxtRouteAnnouncer />
-    <NuxtWelcome /> -->
   </div>
 </template>
 
