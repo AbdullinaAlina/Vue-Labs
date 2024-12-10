@@ -43,15 +43,21 @@
     <!-- Mobile Toolbar -->
     <div class="mobile-toolbar" v-if="isMobile">
       <div class="mobile-toolbar__icons">
-        <div class="mobile-toolbar__icon" @click="goToMessages">
+        <NuxtLink :to="`/chats`">
+          <div class="mobile-toolbar__icon">
           <font-awesome :icon="['fas', 'comment']" />
         </div>
+        </NuxtLink>
+        
         <div class="mobile-toolbar__icon" @click="toggleCategories">
           <font-awesome :icon="isCategoriesOpen ? ['fas', 'arrow-down'] : ['fas', 'bars']" />
         </div>
-        <div class="mobile-toolbar__icon" @click="goToFavorites">
-          <font-awesome :icon="['fas', 'heart']" />
-        </div>
+        <NuxtLink :to="`/favorites`">
+          <div class="mobile-toolbar__icon" @click="goToFavorites">
+            <font-awesome :icon="['fas', 'heart']" />
+          </div>
+        </NuxtLink>
+        
       </div>
 
       <!-- Expanded Categories -->

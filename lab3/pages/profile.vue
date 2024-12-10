@@ -435,11 +435,11 @@ button {
 /* Mobile styles */
 @media (max-width: 768px) {
   .profile {
-    padding: 16px 8px;
+    padding-bottom: 96px;
   }
 
   .profile__container {
-    width: 100%;
+    width: 90%;
     padding: 16px;
     gap: 16px;
   }

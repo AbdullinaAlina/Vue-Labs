@@ -1,13 +1,5 @@
 <template>
-    <div class="following-page">
-      <!-- <h1 class="page-title">Liked posts</h1> -->
-      <!-- <div class="following-list">
-        <Post
-          v-for="post in userStore.likedPostsData"
-          :post="post" 
-          :key="post.id"
-        />
-      </div> -->
+    <div class="favorites-page">
       <div class="user__posts">
         <h1>Liked posts</h1>
         <div class="posts-grid">
@@ -42,7 +34,7 @@ import Post from '~/components/Post.vue';
   });
 
   const currentPage = ref(1);
-const itemsPerPage = 2;  // Change to 2 posts per page
+const itemsPerPage = 4;  // Change to 2 posts per page
 const totalPages = computed(() => Math.ceil(userStore.likedPostsData.length / itemsPerPage));
 
 const paginatedPosts = computed(() => {
@@ -66,14 +58,14 @@ const nextPage = () => {
   </script>
   
   <style scoped>
-  .following-page {
-    padding: 32px;
+  .favorites-page {
     background-image: url('/assets/background.png');
     background-size: cover;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 32px
   }
   
   .page-title {
@@ -100,14 +92,13 @@ const nextPage = () => {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 16px;
 }
 
 .posts-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  margin-top: 16px;
 }
 
 .pagination {
@@ -134,6 +125,31 @@ const nextPage = () => {
 .pagination button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .favorites-page {
+    padding-bottom: 96px;
+  }
+  .posts-grid {
+    display: flex;
+    flex-direction: column; /* Switch to a vertical layout */
+    gap: 16px;
+    width: 100%; /* Take full width */
+  }
+
+  .pagination {
+    gap: 4px;
+  }
+
+  .pagination button {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+
+  .pagination__page {
+    font-size: 0.9rem;
+  }
 }
   </style>
   
