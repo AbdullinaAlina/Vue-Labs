@@ -57,8 +57,6 @@ onMounted(() => {
 });
 </script>
 
-
-  
 <style scoped>
 .following-page {
   padding: 32px;
@@ -78,26 +76,28 @@ onMounted(() => {
 
 .following-list {
   display: flex;
-  flex-direction: column; /* Column layout */
-  gap: 16px; /* Space between items */
-  width: 100%; /* Full width for better alignment */
-  max-width: 600px; /* Limit width for a clean, centered look */
-  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  width: 50%;
+  max-width: 1200px;
 }
 
+/* Responsive Styles */
 @media (max-width: 768px) {
   .following-page {
     padding: 16px;
   }
 
   .page-title {
-    font-size: 1.5rem;
-    margin-bottom: 16px;
+    font-size: 1.8rem;
+    margin-bottom: 24px;
   }
 
   .following-list {
-    gap: 12px; /* Reduce space between items */
-    max-width: 100%; /* Utilize full width for mobile */
+    width: 100%; /* Use full width for smaller screens */
+    gap: 12px;
   }
 }
+
+
 </style>

@@ -289,6 +289,7 @@
 @media (max-width: 768px) {
   .user {
     padding: 8px;
+    padding-bottom: 96px;
   }
 
   .user__container {

@@ -153,5 +153,13 @@ import Sidebar from "~/components/Sidebar.vue";
     transform: scale(0.98);
   }
 }
+
+@media (max-width: 768px) {
+  .chat__messages,
+  .chat__form {
+    width: 80%;
+  }
+
+}
   </style>
   

@@ -85,6 +85,7 @@
     align-items: center;
     gap: 16px;
   }
+  
   .user__avatar {
     width: 96px;
     height: 96px;
@@ -105,21 +106,58 @@
   }
   
   .user__unfollow {
-    background-color: #EC1C1C;
-    color: #ffffff;
-    border: none;
+    background-color: #ffffff;
+    color: #5bb9cd;
+    border: 1px solid #5bb9cd;
     border-radius: 8px;
     padding: 8px 12px;
     cursor: pointer;
   }
   
   .user__chat {
-    background-color: #62C370;
+    background-color: #5bb9cd;
     color: #ffffff;
     border: none;
     border-radius: 8px;
     padding: 8px 12px;
     cursor: pointer;
   }
-  </style>
   
+  @media (max-width: 768px) {
+    .user {
+      flex-direction: row;
+      align-items: center;
+      text-align: center;
+      padding: 12px;
+      gap: 16px;
+    }
+
+    
+  
+    .user__info {
+      flex-direction: row;
+      gap: 8px;
+      text-align: left;
+    }
+  
+    .user__avatar {
+      width: 72px;
+      height: 72px;
+    }
+  
+    .user__name {
+      font-size: 1rem;
+    }
+  
+    .user__actions {
+      flex-direction: row;
+      gap: 8px;
+    }
+  
+    .user__unfollow,
+    .user__chat {
+      font-size: 0.9rem;
+      padding: 6px 10px;
+    }
+  }
+  </style>

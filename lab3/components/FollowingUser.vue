@@ -107,17 +107,16 @@
   }
   
   .user__unfollow {
-    background-color: #EC1C1C;
-    color: #ffffff;
-    border: none;
+    background-color: #ffffff;
+  color: #5bb9cd;
+  border: 1px solid #5bb9cd;
     border-radius: 8px;
     padding: 8px 12px;
     cursor: pointer;
+    
   }
   
   .user__chat {
-    background-color: #62C370;
-    color: #ffffff;
     border: none;
     border-radius: 8px;
     padding: 8px 12px;

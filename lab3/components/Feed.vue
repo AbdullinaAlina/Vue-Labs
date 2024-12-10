@@ -8,7 +8,7 @@
           {{ formatDate(new Date())}}
         </h3>
         <h2>
-          {{ selectedCategory ? selectedCategory : 'All Posts' }}
+          {{ store.selectedCategory ? store.selectedCategory : 'All Posts' }}
         </h2>
           
       </div>
@@ -157,6 +157,7 @@ display: flex;
 flex-direction: row;
 justify-content: space-between;
 align-items: center;
+text-align: left;
 margin-bottom: 12px;
 width: 80%;
 color: #fff
@@ -226,6 +227,10 @@ grid-row: 2;
     display: flex;
     flex-direction: column;
     gap: 16px; /* Reduce gap between items */
+    width: 100%;
+  }
+
+  .header {
     width: 100%;
   }
 }
