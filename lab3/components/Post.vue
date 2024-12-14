@@ -14,7 +14,6 @@
 
       <div class="card__info">
         <div class="card__posted">
-          <!-- <h2 class="card__username">{{ user?.name || "Unknown User" }}</h2> -->
           <h2 class="card__username">{{ userStore.getDisplayName(user.id) }}</h2>
 
           <p class="card__date">{{ formattedPubDate }}</p>
@@ -42,12 +41,12 @@
     </div>
     <p class="card__content">{{ post.Commentary }}</p>
 
-    <div class="card__actions">
+    <div class="card__actions" >
       <button
         class="card__like-button"
         @click="toggleLike(post.id)"
         :style="{ color: isLiked ? '#007BFF' : '#cccccc' }"
-        :disabled="isAuthor"
+        :disabled="!isAuth || isAuthor"
       >
         <font-awesome :icon="['fas', 'thumbs-up']" />
         {{ post.likeCount }}
@@ -81,7 +80,7 @@ export default {
   },
   data() {
     return {
-      user: null, // Store the user data for each post
+      user: null, 
     };
   },
   setup() {
@@ -89,6 +88,11 @@ export default {
     return { userStore };
   },
   computed: {
+    isAuth() {
+      const userStore = useUserStore();
+
+      return this.userStore.user.isAuth;
+    },
     isAuthor() {
       const userStore = useUserStore();
       return String(userStore.user?.id) === String(this.post?.userId);

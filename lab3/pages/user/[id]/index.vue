@@ -10,7 +10,7 @@
               <input v-else v-model="nicknameInput" placeholder="Enter nickname" />
             </div>
             
-            <div class="user__actions">
+            <div class="user__actions" v-if="userStore.user.isAuth">
               <button v-if="isNicknameEditing" @click="saveNickname" class="user__nickname-btn">
                 Save
               </button>
@@ -255,9 +255,9 @@ const cancelNicknameEdit = () => {
   align-items: center;
 }
 
-.user__name {
+/* .user__name {
   margin-right: 20px;
-}
+} */
 
 .user__name h3 {
   font-size: 1.8rem;
@@ -316,6 +316,12 @@ const cancelNicknameEdit = () => {
   gap: 24px;
   font-size: 0.9rem;
   color: #666;
+}
+
+.user__bio {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .user__bio p {

@@ -15,7 +15,7 @@
   
   <script setup>
   import { ref } from 'vue';
-  import BarChart from './BarChart.vue'; // Add a bar chart component
+  import BarChart from './BarChart.vue'; 
   const userStore = useUserStore();
   const user = userStore.user;
   const startDate = ref('');
@@ -34,9 +34,8 @@ const fetchStatistics = async () => {
   const snapshot = await getDocs(q);
   const data = {};
 
-  // Parse selected date range as Date objects
-  const start = new Date(startDate.value);
-  const end = new Date(endDate.value);
+  const start = new Date(`${startDate.value}T00:00:00`); 
+  const end = new Date(`${endDate.value}T23:59:59`);     
 
   console.log(start, end);
   console.log("Docs found for date range:", snapshot.docs);
@@ -46,7 +45,7 @@ const fetchStatistics = async () => {
     const postDate = new Date(post.PubDate);
 
     if (postDate >= start && postDate <= end) {
-      const dateStr = post.PubDate;
+      const dateStr = new Date(post.PubDate).toISOString().split('T')[0]; 
       if (!data[dateStr]) data[dateStr] = 0;
       data[dateStr] += post.likeCount;
     }

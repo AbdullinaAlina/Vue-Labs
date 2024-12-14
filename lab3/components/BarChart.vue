@@ -28,7 +28,7 @@
 
   return {
     labels: sortedData.map((entry) =>
-      format(new Date(entry.x), 'd MMMM') // Convert to desired format
+      format(new Date(entry.x), 'd MMM') // Convert to desired format
     ),
     datasets: [
       {
@@ -39,8 +39,6 @@
     ],
   };
 });
-
-
 
   
   const options = {

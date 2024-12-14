@@ -13,7 +13,7 @@
             </NuxtLink>   
         </div>
       
-      <div class="user__actions">
+      <div class="user__actions" v-if="userStore.user.isAuth">
         <button class="user__unfollow" @click="removeFollower">Remove</button>
         <button class="user__chat" @click="handleChat">Chat</button>
       </div>
@@ -132,7 +132,7 @@
       gap: 16px;
     }
 
-    
+
   
     .user__info {
       flex-direction: row;

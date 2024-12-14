@@ -142,14 +142,14 @@ export default {
 
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two equal columns by default */
+  grid-template-columns: repeat(2, 1fr); 
   gap: 24px;
-  margin: 0 auto; /* Center grid horizontally */
-  padding: 20px; /* Inner padding */
-  background-color: rgba(255, 255, 255, 0.7);
+  margin: 0 auto; 
+  padding: 20px; 
+  background-color: #fff;
   border-radius: 8px;
-  width: 80%; /* Use all available width */
-  box-sizing: border-box; /* Include padding in width */
+  width: 80%;
+  box-sizing: border-box;
 }
 
 .header {
@@ -240,6 +240,17 @@ grid-row: 2;
 
   .header {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .pagination {
+    color: #fff;
   }
 }
 

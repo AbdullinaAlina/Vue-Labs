@@ -59,24 +59,26 @@ const fetchStatistics = async () => {
   const snapshot = await getDocs(q);
 
   const data = {};
+
+  // Parse start and end dates as local dates
   const start = new Date(startDate.value);
+  start.setHours(0, 0, 0, 0); // Start of the day in local time
   const end = new Date(endDate.value);
+  end.setHours(23, 59, 59, 999); // End of the day in local time
 
   console.log('Start Date:', start, 'End Date:', end);
 
   snapshot.forEach((doc) => {
     const post = doc.data();
+    const postDate = new Date(post.PubDate); // Ensure post.PubDate is parsed as a JS Date object
 
-    // Normalize all dates to the YYYY-MM-DD format
-    const postDate = new Date(post.PubDate).toISOString().split('T')[0];
-
-    if (postDate >= startDate.value && postDate <= endDate.value) {
-      if (!data[postDate]) data[postDate] = 0;
-      data[postDate] += 1; // Increment count for the normalized date
+    if (postDate >= start && postDate <= end) {
+      const normalizedDate = postDate.toISOString().split('T')[0]; 
+      if (!data[normalizedDate]) data[normalizedDate] = 0;
+      data[normalizedDate] += 1; 
     }
   });
 
-  // Sort data by date
   const sortedData = Object.keys(data)
     .sort()
     .map((date) => ({ x: date, y: data[date] }));
@@ -86,15 +88,15 @@ const fetchStatistics = async () => {
 };
 
 
-// Initialize flatpickr
+
 onMounted(() => {
   flatpickr(dateRangePicker.value, {
     mode: 'range',
-    dateFormat: 'Y-m-d',
+    dateFormat: 'Y-m-d', 
     onChange: (selectedDates) => {
       if (selectedDates.length === 2) {
-        startDate.value = selectedDates[0].toISOString().split('T')[0];
-        endDate.value = selectedDates[1].toISOString().split('T')[0];
+        startDate.value = format(selectedDates[0], 'yyyy-MM-dd'); 
+        endDate.value = format(selectedDates[1], 'yyyy-MM-dd');
       }
     },
   });

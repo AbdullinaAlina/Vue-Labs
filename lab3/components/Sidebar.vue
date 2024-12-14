@@ -55,6 +55,7 @@ import AuthOverlay from "./AuthOverlay.vue";
 const userStore = useUserStore();
 const store = useStore();
 const user = computed(() => userStore.user);
+const router = useRouter();
 
 const emit = defineEmits(["categorySelected"]);
 
@@ -88,6 +89,7 @@ const selectCategory = (category) => {
     store.setSelectedCategory(category); 
   }
   isSideBarOpen.value = false;
+  router.push("/");
 };
 
 const toggleOverlay = () => {

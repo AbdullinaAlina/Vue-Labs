@@ -13,7 +13,7 @@
             </NuxtLink>   
         </div>
       
-      <div class="user__actions">
+      <div class="user__actions" v-if="userStore.user.isAuth">
         <button class="user__unfollow" @click="unfollowUser">Unfollow</button>
         <button class="user__chat" @click="handleChat">Chat</button>
       </div>
