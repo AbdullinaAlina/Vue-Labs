@@ -174,7 +174,7 @@ h2 {
 
 .date-picker__inputs {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 12px;
 }
@@ -211,37 +211,39 @@ h2 {
   }
 
   h2 {
-    font-size: 1.5rem; /* Adjust heading size */
-    margin-bottom: 16px; /* Reduce margin */
+    font-size: 1.5rem; 
+    margin-bottom: 16px; 
   }
 
   .date-picker {
-    gap: 4px; /* Reduce spacing */
-    margin-bottom: 24px; /* Reduce margin */
+    gap: 4px; 
+    margin-bottom: 24px; 
   }
 
   .date-picker__inputs {
-    flex-direction: column; /* Stack inputs vertically */
-    gap: 8px; /* Add vertical spacing */
+    width: 80%;
+    flex-direction: column; 
+    gap: 8px; 
   }
 
   .date-input {
-    width: 100%; /* Make inputs full-width */
-    font-size: 0.85rem; /* Adjust font size */
+    text-align: center;
+    width: 100%; 
+    font-size: 0.85rem; 
   }
 
   .btn-fetch {
-    width: 100%; /* Full width for button */
-    font-size: 0.85rem; /* Adjust font size */
+    width: 100%; 
+    font-size: 0.85rem; 
   }
 
   .chart-container {
-    margin-top: 24px; /* Reduce margin */
+    margin-top: 24px; 
   }
 
   .no-data-message {
-    font-size: 0.9rem; /* Adjust font size */
-    margin-top: 12px; /* Reduce margin */
+    font-size: 0.9rem; 
+    margin-top: 12px; 
   }
 }
 

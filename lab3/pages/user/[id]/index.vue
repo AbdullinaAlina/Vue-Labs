@@ -7,14 +7,18 @@
           <div class="user__header">
             <div class="user__name">
               <h3 v-if="!isNicknameEditing">{{ userStore.getDisplayName(user.id) }}</h3>
-    
-              <!-- If editing, show the input field to edit the nickname -->
               <input v-else v-model="nicknameInput" placeholder="Enter nickname" />
             </div>
             
             <div class="user__actions">
-              <button @click="toggleNicknameEdit" class="user__nickname-btn">
-                {{ isNicknameEditing ? 'Save' : 'Add Nickname' }}
+              <button v-if="isNicknameEditing" @click="saveNickname" class="user__nickname-btn">
+                Save
+              </button>
+              <button v-if="isNicknameEditing" @click="cancelNicknameEdit" class="user__unfollow">
+                Cancel
+              </button>
+              <button v-else @click="toggleNicknameEdit" class="user__nickname-btn">
+                <font-awesome :icon="['fas', 'pen']" />
               </button>
               <button @click="followUser" v-if="isFollowShown" class="user__follow">Follow</button>
               <button @click="unfollowUser" v-else class="user__unfollow">Unfollow</button>
@@ -153,19 +157,53 @@ const nicknameInput = ref(''); // Holds the value of the nickname input
     }
   };
 
-  const toggleNicknameEdit = async () => {
+//   const toggleNicknameEdit = async () => {
+//   const currentNickname = userStore.user.nicknames?.[userId] || ''; // Safe access
+//   if (isNicknameEditing.value) {
+//     if (nicknameInput.value.trim() === '') {
+//       await userStore.removeNickname(userId); // Remove nickname for the target user
+//     } else {
+//       await userStore.setNickname(userId, nicknameInput.value); // Set the nickname for the target user
+//     }
+//   } else {
+//     nicknameInput.value = currentNickname; // Pre-fill with existing nickname
+//   }
+//   isNicknameEditing.value = !isNicknameEditing.value;
+// };
+
+const toggleNicknameEdit = async () => {
+  // Get the current nickname from the logged-in user's nicknames map for the target user
   const currentNickname = userStore.user.nicknames?.[userId] || ''; // Safe access
-  if (isNicknameEditing.value) {
-    if (nicknameInput.value.trim() === '') {
-      await userStore.removeNickname(userId); // Remove nickname for the target user
-    } else {
-      await userStore.setNickname(userId, nicknameInput.value); // Set the nickname for the target user
-    }
-  } else {
-    nicknameInput.value = currentNickname; // Pre-fill with existing nickname
-  }
+  
+  // Pre-fill the input with the existing nickname (if available) or empty string
+  nicknameInput.value = currentNickname;
+
+  // Toggle edit mode
   isNicknameEditing.value = !isNicknameEditing.value;
 };
+
+// Function to save the new nickname
+const saveNickname = async () => {
+  if (nicknameInput.value.trim() === '') {
+    // If the input is empty, remove the nickname
+    await userStore.removeNickname(userId);
+  } else {
+    // Otherwise, save the new nickname
+    await userStore.setNickname(userId, nicknameInput.value);
+  }
+  // Exit edit mode after saving
+  isNicknameEditing.value = false;
+};
+
+// Function to cancel nickname editing and revert to the previous value
+const cancelNicknameEdit = () => {
+  // Exit edit mode
+  isNicknameEditing.value = false;
+
+  // Revert the input to the original nickname (before editing)
+  nicknameInput.value = userStore.user.nicknames?.[userId] || ''; // Use original nickname
+};
+
 </script>
   
   <style scoped>
@@ -257,6 +295,20 @@ const nicknameInput = ref(''); // Holds the value of the nickname input
   background-color: #efefef;
   color: #000000;
   border: none;
+}
+
+.user__nickname-btn {
+  font-size: 1rem;
+  padding: 6px 12px;
+  background-color: #5bb9cd;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.user__nickname-btn i {
+  font-size: 1.2rem; /* Adjust size of the pen icon */
 }
 
 .user__statistic {

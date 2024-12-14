@@ -1,7 +1,7 @@
 <template>
     <div class="mobile-toolbar">
       <div class="mobile-toolbar__icons">
-        <NuxtLink :to="`/chats`">
+        <NuxtLink :to="`/chats`" @click="closeCategories">
           <div class="mobile-toolbar__icon">
             <font-awesome :icon="['fas', 'comment']" />
           </div>
@@ -13,7 +13,7 @@
           />
         </div>
   
-        <NuxtLink :to="`/favorites`">
+        <NuxtLink :to="`/favorites`" @click="closeCategories">
           <div class="mobile-toolbar__icon">
             <font-awesome :icon="['fas', 'heart']" />
           </div>
@@ -21,7 +21,7 @@
       </div>
   
       <!-- Expanded Categories -->
-      <div class="mobile-toolbar__categories" v-if="isCategoriesOpen">
+      <div class="mobile-toolbar__categories" v-show="isCategoriesOpen">
         <div class="mobile-toolbar__grid">
           <div
             v-for="(category, index) in categories"
@@ -60,6 +60,10 @@
     isCategoriesOpen.value = !isCategoriesOpen.value;
   };
   
+  const closeCategories = () => {
+  isCategoriesOpen.value = false;
+};
+
   const selectCategory = (category) => {
     emit("categorySelected", category === "Show All" ? null : category);
     isCategoriesOpen.value = false;
@@ -105,6 +109,7 @@
     bottom: 100%; /* Position above the toolbar */
     left: 0;
     width: 100%;
+    transition: bottom 0.3s ease;
   }
   
   .mobile-toolbar__grid {

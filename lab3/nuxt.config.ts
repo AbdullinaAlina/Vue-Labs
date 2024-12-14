@@ -28,7 +28,8 @@ export default defineNuxtConfig({
         "chart-line",
         "atom",
         "heartbeat",
-        "list"
+        "list",
+        "pen"
       ],
       regular: ['star', 'star-half','star-half-stroke', 'heart', 'comment']
     }
