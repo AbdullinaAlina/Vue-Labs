@@ -17,13 +17,13 @@
           v-for="(category, index) in categories"
           :key="index"
           @click="selectCategory(category)"
+          class="sidebar__category"
         >
           {{ category }}
         </li>
       </ul>
     </div>
 
-    <!-- Profile Icon -->
     <div class="profile-icon" @click="toggleOverlay">
       <img
         class="profile__avatar"
@@ -38,7 +38,6 @@
       class="sidebar__auth-overlay"
     />
 
-    <!-- Mobile Toolbar -->
     <MobileToolbar
       v-if="isMobile"
       @categorySelected="selectCategory"
@@ -125,8 +124,21 @@ const closeAuthOverlay = () => {
   text-align: center;
 }
 
+.sidebar__icon:hover {
+  background-color: #7F9A3E;
+}
+
+.sidebar__button {
+  background-color: #7F9A3E;
+  padding: 12px;
+  border: none;
+  margin-bottom: 36px;
+  cursor: pointer;
+  font-size: 24px;
+}
+
 .sidebar__menu {
-  background-color: #f4f4f4;
+  background-color: #8FAB44;
   width: 420px;
   padding: 16px;
   height: 100vh;
@@ -141,6 +153,20 @@ const closeAuthOverlay = () => {
   transition: all 0.3s ease;
 }
 
+.sidebar__categories {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  list-style: none;
+}
+
+.sidebar__category {
+  background-color: #B0D17C;
+    color: white;
+    text-align: center;
+    padding: 12px;
+}
+
 .profile-icon {
   display: flex;
   align-items: center;
@@ -151,63 +177,6 @@ const closeAuthOverlay = () => {
   width: 36px;
 }
 
-/* Mobile Toolbar */
-.mobile-toolbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #ffffff;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-}
-
-.mobile-toolbar__icons {
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-}
-
-.mobile-toolbar__icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  font-size: 24px;
-  cursor: pointer;
-  color: #555;
-}
-
-.mobile-toolbar__icon:hover {
-  color: #007BFF;
-}
-
-.mobile-toolbar__categories {
-  background-color: #f8f8f8;
-  width: 100%;
-  padding: 20px;
-}
-
-.mobile-toolbar__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.mobile-toolbar__category {
-  padding: 10px;
-  text-align: center;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.mobile-toolbar__category:hover {
-  background-color: #007BFF;
-  color: #ffffff;
-}
 
 @media (max-width: 768px) {
   .sidebar {

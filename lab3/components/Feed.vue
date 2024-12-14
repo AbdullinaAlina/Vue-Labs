@@ -4,13 +4,13 @@
   <div class="feed">
     <div class="header">
       <div class="section">
-        <h3>
-          {{ formatDate(new Date())}}
-        </h3>
-        <h2>
+        <h1>
           {{ store.selectedCategory ? store.selectedCategory : 'All Posts' }}
-        </h2>
-          
+        </h1>
+        <h1>/</h1>
+        <h1>
+          {{ formatDate(new Date())}}
+        </h1>
       </div>
       <div class="filters">
           <label for="sort-options">Sort by:</label>
@@ -158,9 +158,17 @@ flex-direction: row;
 justify-content: space-between;
 align-items: center;
 text-align: left;
-margin-bottom: 12px;
 width: 80%;
 color: #fff
+}
+
+.section {
+  background-color: #5BB9CD;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
 }
 .filters {
 margin-bottom: 10px;

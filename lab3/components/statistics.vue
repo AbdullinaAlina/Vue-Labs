@@ -2,12 +2,10 @@
     <div class="statistics-page">
       <h2>Post Statistics</h2>
   
-      <!-- Date Range Picker -->
       <label for="date-range">Select Date Range:</label>
       <input type="date" v-model="startDate" /> to <input type="date" v-model="endDate" />
       <button @click="fetchStatistics">Show Statistics</button>
   
-      <!-- Bar Chart -->
       <div v-if="chartData.length">
         <h3>Likes per Day</h3>
         <BarChart :data="chartData" />
@@ -43,12 +41,10 @@ const fetchStatistics = async () => {
   console.log(start, end);
   console.log("Docs found for date range:", snapshot.docs);
 
-  // Filter documents based on the PubDate string
   snapshot.forEach((doc) => {
     const post = doc.data();
     const postDate = new Date(post.PubDate);
 
-    // Check if postDate falls within the selected range
     if (postDate >= start && postDate <= end) {
       const dateStr = post.PubDate;
       if (!data[dateStr]) data[dateStr] = 0;
@@ -56,10 +52,8 @@ const fetchStatistics = async () => {
     }
   });
 
-  // Convert the data object to an array for charting
   chartData.value = Object.keys(data).map((date) => ({ x: date, y: data[date] }));
 
-  // Log posts found for debugging
   console.log("Posts found for date range:", chartData.value);
 };
 

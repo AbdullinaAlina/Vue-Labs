@@ -160,6 +160,10 @@
 }
 
 @media (max-width: 768px) {
+  .chat {
+    padding-bottom: 96px;
+  }
+  
   .chat__messages,
   .chat__form {
     width: 80%;

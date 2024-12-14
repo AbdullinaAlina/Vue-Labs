@@ -59,7 +59,7 @@
     }
   
     .page-title {
-      font-size: 1.5rem;
+      color: white;
       margin-bottom: 16px;
     }
   
