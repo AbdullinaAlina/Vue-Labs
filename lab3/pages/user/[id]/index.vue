@@ -6,12 +6,16 @@
         <div class="user__info">
           <div class="user__header">
             <div class="user__name">
-              <!-- <h3>{{ user.name }}</h3> -->
-              <h3>{{ userStore.getDisplayName(user.id) }}</h3>
-
+              <h3 v-if="!isNicknameEditing">{{ userStore.getDisplayName(user.id) }}</h3>
+    
+              <!-- If editing, show the input field to edit the nickname -->
+              <input v-else v-model="nicknameInput" placeholder="Enter nickname" />
             </div>
             
             <div class="user__actions">
+              <button @click="toggleNicknameEdit" class="user__nickname-btn">
+                {{ isNicknameEditing ? 'Save' : 'Add Nickname' }}
+              </button>
               <button @click="followUser" v-if="isFollowShown" class="user__follow">Follow</button>
               <button @click="unfollowUser" v-else class="user__unfollow">Unfollow</button>
               <button @click="chatUser" class="user__message">Message</button>
@@ -79,6 +83,10 @@
   const router = useRouter();
   const userId = route.params.id;
 
+  const isNicknameEditing = ref(false); // Tracks whether the nickname is being edited
+const nicknameInput = ref(''); // Holds the value of the nickname input
+
+
   onMounted(() => {
     console.log("heey");
     userStore.fetchFollowerUserData();
@@ -145,7 +153,20 @@
     }
   };
 
-  </script>
+  const toggleNicknameEdit = async () => {
+  const currentNickname = userStore.user.nicknames?.[userId] || ''; // Safe access
+  if (isNicknameEditing.value) {
+    if (nicknameInput.value.trim() === '') {
+      await userStore.removeNickname(userId); // Remove nickname for the target user
+    } else {
+      await userStore.setNickname(userId, nicknameInput.value); // Set the nickname for the target user
+    }
+  } else {
+    nicknameInput.value = currentNickname; // Pre-fill with existing nickname
+  }
+  isNicknameEditing.value = !isNicknameEditing.value;
+};
+</script>
   
   <style scoped>
 .user {

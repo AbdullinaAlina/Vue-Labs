@@ -4,7 +4,7 @@ import { auth, db } from '~/plugins/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { ref } from 'vue';
 import { useStore } from './useStore';
-import { arrayRemove, arrayUnion, doc, getDoc, getDocs, increment, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, deleteField, doc, getDoc, getDocs, increment, updateDoc } from 'firebase/firestore';
 
 export const useUserStore = defineStore('user', () => {
     const mainStore = useStore();
@@ -226,8 +226,44 @@ export const useUserStore = defineStore('user', () => {
     }
     
     return realName; // Fallback to the real name
-  }
+  };
   
+// Set a nickname for a specific user by the logged-in user
+async function setNickname(userId, nickname) {
+  try {
+    const userDocRef = doc(db, 'users', user.value.id); // Use the logged-in user's id (user.value.id)
+    
+    // Ensure the nickname is properly set for the target user (userId)
+    await updateDoc(userDocRef, {
+      [`nicknames.${userId}`]: nickname, // Set the nickname for the target user by userId
+    });
+
+    // Update the local state (Pinia store)
+    user.value.nicknames[userId] = nickname; // Update the local state to reflect the new nickname
+  } catch (error) {
+    console.error('Error setting nickname:', error);
+  }
+}
+
+// Remove a nickname for a specific user by the logged-in user
+async function removeNickname(userId) {
+  try {
+    const userDocRef = doc(db, 'users', user.value.id); // Use the logged-in user's id (user.value.id)
+    
+    // Remove the nickname for the target user (userId)
+    await updateDoc(userDocRef, {
+      [`nicknames.${userId}`]: deleteField(), // Remove the nickname for the target user by userId
+    });
+
+    // Update the local state (Pinia store)
+    delete user.value.nicknames[userId]; // Remove from local state as well
+  } catch (error) {
+    console.error('Error removing nickname:', error);
+  }
+}
+
+
+
 
 
   return {
@@ -247,6 +283,8 @@ export const useUserStore = defineStore('user', () => {
     removeFollower,
     likePost,
     unlikePost,
-    getDisplayName
+    getDisplayName,
+    setNickname,
+    removeNickname
   };
 });

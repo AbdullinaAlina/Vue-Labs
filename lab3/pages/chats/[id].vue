@@ -1,6 +1,7 @@
 <template>
     <div class="chat" v-if="userId">
       <h2>Chat with {{ otherUserName }}</h2>
+
       <div class="chat__messages">
         <div 
           v-for="message in messages" 
@@ -48,7 +49,6 @@
 
   import SentMessage from "~/components/SentMessage.vue";
   import ReceivedMessage from "~/components/ReceivedMessage.vue";
-import Sidebar from "~/components/Sidebar.vue";
   
   const route = useRoute();
   const chatId = route.params.id;
@@ -57,9 +57,9 @@ import Sidebar from "~/components/Sidebar.vue";
   const userStore = useUserStore();
   const mainStore = useStore();
 
-  const userId = userStore.user.id; // Replace with the logged-in user ID
-  const userName = userStore.user.username; // Replace with the logged-in user's name
-  const userAvatar = userStore.user.avatar; // Replace with the logged-in user's avatar
+  const userId = userStore.user.id; 
+  const userName = userStore.user.username; 
+  const userAvatar = userStore.user.avatar; 
   const message = ref("");
   
   onMounted(() => {
@@ -80,8 +80,13 @@ import Sidebar from "~/components/Sidebar.vue";
     return mainStore.users.find((user) => String(user.id) === String(otherUserId.value));
   })
 
-  const otherUserName = computed(() => otherUser.value?.name || "Unknown User");
-    const otherUserAvatar = computed(() => otherUser.value?.Avatar || "/assets/no_pfp.svg");
+  const otherUserName = computed(() => {
+  const nickname = userStore.user.nicknames?.[otherUserId.value];
+  return nickname || otherUser.value?.name || "Unknown User";
+});
+
+
+  const otherUserAvatar = computed(() => otherUser.value?.Avatar || "/assets/no_pfp.svg");
   
   const sendMessage = async () => {
     if (message.value.trim()) {

@@ -39,6 +39,10 @@
   
   <script setup>
   import { ref, defineEmits } from "vue";
+  import { useRouter } from "vue-router";
+
+
+  const router = useRouter();
   
   const emit = defineEmits(["categorySelected"]);
   const isCategoriesOpen = ref(false);
@@ -59,6 +63,7 @@
   const selectCategory = (category) => {
     emit("categorySelected", category === "Show All" ? null : category);
     isCategoriesOpen.value = false;
+    router.push("/");
   };
   </script>
   
